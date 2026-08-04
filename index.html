@@ -605,7 +605,9 @@ function renderTop(){
   el('backToTeamSetup').classList.toggle('hidden',!adminLike);
   el('resetScores').classList.toggle('hidden',!adminLike);
 }
-
+ el('createBack').onclick = () => { setScreen('home'); };
+el('joinBack').onclick = () => { setScreen('home'); };
+el('masterBack').onclick = () => { setScreen('home'); };
 /* Inputs */
 function buildRandomInputs(){
   const wrap=el('randomInputs');wrap.innerHTML='';randomInputs.length=0;
