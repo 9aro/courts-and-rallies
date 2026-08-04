@@ -9,8 +9,13 @@ app = FastAPI()
 # ---------- CORS ----------
 
 origins = [
+    # Old Netlify frontend (still allowed if you keep using it)
     "https://courtsandrallies.netlify.app",
-    # add other frontends here if needed
+
+    # New GitHub Pages frontend
+    "https://9aro.github.io",
+    "https://9aro.github.io/courts-and-rallies/",
+    "https://9aro.github.io/courts-and-rallies",
 ]
 
 app.add_middleware(
@@ -21,7 +26,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------- Models ----------
+# ---------- Config / models ----------
+
+ADMIN_TOOLS_PASSCODE = "pickleball"  # tools/admin panel passcode
 
 class SessionCreate(BaseModel):
     name: str
@@ -36,6 +43,9 @@ SESSIONS: List[Session] = []
 
 class HostLoginBody(BaseModel):
     admin_passcode: str
+
+class AdminToolsLoginBody(BaseModel):
+    tools_passcode: str
 
 # ---------- Routes ----------
 
@@ -87,18 +97,26 @@ def host_login(session_id: str, body: HostLoginBody):
     """
     Verify the admin passcode for a session.
 
-    Frontend calls:
+    Frontend calls (from Host existing session):
     POST /sessions/<session_id>/host-login
     body: { "admin_passcode": "..." }
-
-    If passcode matches, return the session so the frontend
-    can switch into host/admin mode for that game.
     """
     for s in SESSIONS:
         if s.id == session_id:
             if s.admin_passcode == body.admin_passcode:
                 return s
-            # wrong passcode
             raise HTTPException(status_code=401, detail="Wrong admin passcode")
-
     raise HTTPException(status_code=404, detail="Session not found")
+
+@app.post("/admin/tools-login")
+def admin_tools_login(body: AdminToolsLoginBody):
+    """
+    Check tools/admin passcode for local Admin panel.
+
+    Frontend calls:
+    POST /admin/tools-login
+    body: { "tools_passcode": "..." }
+    """
+    if body.tools_passcode == ADMIN_TOOLS_PASSCODE:
+        return {"ok": True}
+    raise HTTPException(status_code=401, detail="Wrong admin tools passcode")
