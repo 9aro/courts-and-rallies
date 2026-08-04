@@ -425,7 +425,7 @@ font-size:13px;
 <div class="error hidden" id="joinError"></div>
 </div>
 
-<!-- Admin (backend sessions) -->
+<!-- Admin -->
 <div class="screen hidden" id="masterScreen">
 <h2 class="title">Admin</h2>
 <p class="subtitle">Edit or delete any session. Use this only when you mean it.</p>
@@ -443,6 +443,7 @@ font-size:13px;
 <div class="section hidden" id="masterContent">
 <div class="subtitle">Sessions on the server</div>
 <div class="match-list" id="masterGameList"></div>
+<button class="btn secondary" id="masterHome">Back to home</button>
 </div>
 </div>
 
@@ -517,6 +518,7 @@ font-size:13px;
 <button class="btn ghost" id="randomAssign">Shuffle into teams</button>
 <button class="btn" id="continueFixtures">Build fixtures</button>
 <button class="btn secondary" id="teamBack">Back to session</button>
+<button class="btn secondary" id="teamHome">Back to home</button>
 </div>
 <div class="error hidden" id="teamError"></div>
 </div>
@@ -535,6 +537,7 @@ font-size:13px;
 <div class="section row">
 <button class="btn secondary hidden" id="backToTeamSetup">Back to team setup</button>
 <button class="btn secondary hidden" id="resetScores">Reset match results</button>
+<button class="btn secondary" id="fixturesHome">Back to home</button>
 </div>
 
 <div class="section summary">
@@ -578,10 +581,35 @@ const manualTeam2Inputs = [];
 const t1Slots = [];
 const t2Slots = [];
 
-function uid(){return 'g_'+Math.random().toString(36).slice(2,9);}
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function currentGame(){return state.games.find(g=>g.id===state.currentGameId)||null;}
-function setError(id,msg){const box=el(id);box.textContent=msg||'';box.classList.toggle('hidden',!msg);}
+// lightweight session cache for names when joining/admin
+let serverSessionsCache = [];
+
+function currentGame(){
+  // local game object if we have it, otherwise build a thin placeholder from backend cache
+  const local = state.games.find(g=>g.id===state.currentGameId);
+  if (local) return local;
+  const fromServer = serverSessionsCache.find(s=>String(s.id)===String(state.currentGameId));
+  if (fromServer) {
+    return {
+      id: fromServer.id,
+      name: fromServer.name,
+      team1Name: 'Team 1',
+      team2Name: 'Team 2',
+      gamesPerPlayer: 4,
+      rounds: 5,
+      matches: [],
+      team1Score: 0,
+      team2Score: 0,
+      team1: { players: [] },
+      team2: { players: [] }
+    };
+  }
+  return null;
+}
+
+function setError(id,msg){
+  const box=el(id);box.textContent=msg||'';box.classList.toggle('hidden',!msg);
+}
 
 function setScreen(name){
   state.screen=name;
@@ -590,22 +618,27 @@ function setScreen(name){
   el(name+'Screen').classList.remove('hidden');
   renderTop();
 }
+
 function renderTop(){
   const modeLabel = state.master
     ? 'Admin (all sessions)'
     : (state.mode==='admin'?'Admin mode':'Viewer mode');
   el('modeBadge').textContent=modeLabel;
   const g=currentGame();
-  el('gameBadge').textContent=g?g.name:'No session selected';
+  el('gameBadge').textContent=g && g.name ? g.name : 'No session selected';
   const adminLike = state.mode==='admin' || state.master;
   el('backToTeamSetup').classList.toggle('hidden',!adminLike);
   el('resetScores').classList.toggle('hidden',!adminLike);
 }
 
-/* Simple back buttons */
+/* Simple back/home buttons */
 el('createBack').onclick = () => { setScreen('home'); };
 el('joinBack').onclick = () => { setScreen('home'); };
-el('masterBack').onclick = () => { setScreen('home'); };
+el('masterBack').onclick = () => { state.master=false; setScreen('home'); };
+el('masterHome').onclick = () => { state.master=false; setScreen('home'); };
+el('teamBack').onclick = () => { setScreen('create'); };
+el('teamHome').onclick = () => { setScreen('home'); };
+el('fixturesHome').onclick = () => { setScreen('home'); };
 
 /* Join continue (viewer) */
 el('joinContinue').onclick = () => {
@@ -622,12 +655,12 @@ el('joinContinue').onclick = () => {
 
   setError('joinError','');
 
-  // use the selected backend session id
   state.currentGameId = gameId;
   state.mode = 'viewer';
   state.master = false;
 
-  // viewer goes straight to fixtures; they see matches but cannot edit scores
+  // Top badge now uses session name from cache
+  renderTop();
   setScreen('fixtures');
 };
 
@@ -677,7 +710,7 @@ function updateTeamPreview(team1List,team2List){
   el('teamsCardsWrap').classList.remove('hidden');
 }
 
-/* Team assignment */
+/* Team assignment + fairness engine (same as before) */
 function assignRandomToTeams(game){
   const names=randomInputs.map(i=>i.value.trim()).filter(Boolean);
   if(names.length!==10){setError('teamError','This format needs exactly 10 players.');return false;}
@@ -697,8 +730,8 @@ function assignManualToTeams(game){
   setError('teamError','Manual teams locked in. Nice.');
   return true;
 }
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-/* Fairness engine */
 function buildTeamSitSchedule(teamPlayers, rounds, gamesPerPlayer){
   const restNeeded = rounds - gamesPerPlayer;
   const totalSitSlots = teamPlayers.length * restNeeded;
@@ -724,7 +757,6 @@ function buildTeamSitSchedule(teamPlayers, rounds, gamesPerPlayer){
   }
   return sitSchedule;
 }
-
 function buildFairScheduleFixed(team1, team2){
   const gamesPerPlayer = 4;
   const rounds = 5;
@@ -745,7 +777,6 @@ function buildFairScheduleFixed(team1, team2){
   }
   return {matches, rounds, gamesPerPlayer};
 }
-
 function saveTeamsAndFixtures(game){
   const result = buildFairScheduleFixed(game.team1.players, game.team2.players);
   if(!result || result.rounds!==5){
@@ -762,12 +793,10 @@ function saveTeamsAndFixtures(game){
   el('calculatedRoundsTeam').value='5';
   return true;
 }
-
 function scoreGame(game){
   game.team1Score = game.matches.filter(m=>m.winner==='team1').length;
   game.team2Score = game.matches.filter(m=>m.winner==='team2').length;
 }
-
 function updateFixtureHeader(game){
   el('gamesPerPlayerPill').textContent=String(game.gamesPerPlayer??4);
   el('roundsPill').textContent=String(game.rounds||5);
@@ -788,7 +817,6 @@ function updateFixtureHeader(game){
     ? 'Overall winner · TBD'
     : 'Overall winner · '+(game.team1Score>game.team2Score?t1:t2);
 }
-
 function renderMatches(game){
   const list=el('matchList'); list.innerHTML='';
   const t1=game.team1Name||'Team 1', t2=game.team2Name||'Team 2';
@@ -816,7 +844,6 @@ function renderMatches(game){
   });
   list.querySelectorAll('.winner-btn').forEach(btn=>btn.addEventListener('click',()=>setWinner(Number(btn.dataset.match),btn.dataset.team)));
 }
-
 function showFixtures(game){
   updateFixtureHeader(game); renderMatches(game); setScreen('fixtures');
   const adminLike = state.mode==='admin' || state.master;
@@ -849,6 +876,7 @@ async function refreshJoinSelect(){
     }
 
     const sessions = await res.json();
+    serverSessionsCache = sessions;
 
     if (!sessions.length) {
       const opt = document.createElement('option');
@@ -883,6 +911,7 @@ async function fetchServerSessions() {
       throw new Error('Failed to load backend sessions: ' + res.status);
     }
     const sessions = await res.json();
+    serverSessionsCache = sessions;
     return sessions;
   } catch (e) {
     console.error("Admin fetchServerSessions error:", e);
@@ -891,7 +920,7 @@ async function fetchServerSessions() {
   }
 }
 
-/* Admin list (server-backed) */
+/* Admin list with delete */
 async function renderMasterList(){
   const list=el('masterGameList');
   list.innerHTML='';
@@ -929,15 +958,18 @@ async function renderMasterList(){
       const action=btn.dataset.action;
       if(action==='delete'){
         try {
-          await fetch(API_BASE + "/sessions/" + id, { method: "DELETE" });
+          const res = await fetch(API_BASE + "/sessions/" + id, { method: "DELETE" });
+          if (!res.ok) {
+            return setError('masterError','Delete failed. Backend status ' + res.status + '.');
+          }
+          setError('masterError','Session deleted.');
         } catch (e) {
           console.error("Delete session error:", e);
-          setError('masterError','Could not delete session.');
+          return setError('masterError','Could not delete session (network error).');
         }
-        renderMasterList();
+        await renderMasterList();
+        await refreshJoinSelect();
       }else if(action==='open'){
-        // For now: mark this session id and go to fixtures as admin.
-        // Detailed players/fixtures are still local; this just sets context.
         state.currentGameId = id;
         state.mode = 'admin';
         state.master = true;
@@ -985,6 +1017,7 @@ el('createContinue').onclick = async () => {
     }
 
     const session = await res.json(); // { id, name }
+    serverSessionsCache.push(session);
 
     const game = {
       id: session.id,
@@ -1032,8 +1065,6 @@ el('masterLogin').onclick=()=>{
 };
 
 /* Team screen */
-el('teamBack').onclick=()=>setScreen('create');
-
 el('modeRandom').onclick=()=>{
   state.assignmentMode='random';
   el('modeRandom').classList.add('active'); el('modeManual').classList.remove('active');
