@@ -83,41 +83,44 @@
     <div id="status"></div>
     <div id="error"></div>
   </div>
+<script>
+  console.log("JS is working!");
 
-  <script>
-    console.log("JS is working!");
+  const API_BASE = "https://courts-and-rallies.onrender.com";
 
-    const API_BASE = "https://courts-and-rallies.onrender.com";
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("hostButton");
+    const statusEl = document.getElementById("status");
+    const errorEl = document.getElementById("error");
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("hostButton");
-      const statusEl = document.getElementById("status");
-      const errorEl = document.getElementById("error");
+    console.log("Found host button:", btn);
 
-      console.log("Found host button:", btn);
+    btn.addEventListener("click", async () => {
+      console.log("Host button clicked, checking backend...");
+      statusEl.textContent = "";
+      errorEl.textContent = "";
 
-      btn.addEventListener("click", async () => {
-        console.log("Host button clicked, checking backend...");
-        statusEl.textContent = "";
-        errorEl.textContent = "";
+      try {
+        console.log("About to fetch:", API_BASE + "/health");
 
-        try {
-          const res = await fetch(API_BASE + "/health");
-          if (!res.ok) {
-            errorEl.textContent = "Backend returned an error: " + res.status;
-            console.log("Backend error status:", res.status);
-            return;
-          }
+        const res = await fetch(API_BASE + "/health");
+        console.log("Fetch finished, res:", res);
 
-          const data = await res.json();
-          console.log("Backend replied:", data);
-          statusEl.textContent = "Backend status: " + (data.status || "unknown");
-        } catch (e) {
-          console.error("Network error talking to backend:", e);
-          errorEl.textContent = "Could not reach backend. Check Render URL.";
+        if (!res.ok) {
+          errorEl.textContent = "Backend returned an error: " + res.status;
+          console.log("Backend error status:", res.status);
+          return;
         }
-      });
+
+        const data = await res.json();
+        console.log("Backend JSON:", data);
+        statusEl.textContent = "Backend status: " + (data.status || "unknown");
+      } catch (e) {
+        console.error("Network error talking to backend:", e);
+        errorEl.textContent = "Could not reach backend. Check Render URL.";
+      }
     });
-  </script>
+  });
+</script>
 </body>
 </html>
