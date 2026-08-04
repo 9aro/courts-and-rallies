@@ -607,12 +607,6 @@ function renderTop(){
 el('joinBack').onclick = () => { setScreen('home'); };
 el('masterBack').onclick = () => { setScreen('home'); };
 
-  el('joinStart').onclick = () => {
-  state.mode = 'join';
-  setScreen('join');
-  refreshJoinSelect();
-};
-
   
 /* Inputs */
 function buildRandomInputs(){
