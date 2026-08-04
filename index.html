@@ -441,7 +441,7 @@ font-size:13px;
 </div>
 
 <div class="section hidden" id="masterContent">
-<div class="subtitle">Sessions on the server</div>
+<div class="subtitle">Sessions on this device (admin view)</div>
 <div class="match-list" id="masterGameList"></div>
 <button class="btn secondary" id="masterHome">Back to home</button>
 </div>
@@ -708,7 +708,7 @@ function updateTeamPreview(team1List,team2List){
   el('teamsCardsWrap').classList.remove('hidden');
 }
 
-/* Team assignment + fairness engine */
+/* Team assignment + fairness engine (same as before) */
 function assignRandomToTeams(game){
   const names=randomInputs.map(i=>i.value.trim()).filter(Boolean);
   if(names.length!==10){setError('teamError','This format needs exactly 10 players.');return false;}
@@ -899,51 +899,33 @@ async function refreshJoinSelect(){
   }
 }
 
-/* Admin: fetch sessions from backend */
-async function fetchServerSessions() {
-  try {
-    const res = await fetch(API_BASE + "/sessions");
-    if (!res.ok) {
-      throw new Error('Failed to load backend sessions: ' + res.status);
-    }
-    const sessions = await res.json();
-    serverSessionsCache = sessions;
-    return sessions;
-  } catch (e) {
-    console.error("Admin fetchServerSessions error:", e);
-    setError('masterError', 'Could not load sessions from server.');
-    return [];
-  }
-}
-
-/* Admin list with delete wired */
-async function renderMasterList(){
+/* Admin list — backend delete via query param */
+function renderMasterList(){
   const list=el('masterGameList');
   list.innerHTML='';
 
-  const sessions = await fetchServerSessions();
-  if(!sessions.length){
+  if (!state.games.length) {
     const empty=document.createElement('div');
     empty.className='card';
-    empty.textContent='No sessions on the server.';
+    empty.textContent='No sessions stored on this device.';
     list.appendChild(empty);
     return;
   }
 
-  sessions.forEach(s=>{
+  state.games.forEach(g=>{
     const card=document.createElement('div');
     card.className='match-card';
     card.innerHTML=`
       <div class="match-head">
         <div>
-          <div class="match-title">${s.name}</div>
-          <div class="match-meta">Session ID · ${s.id}</div>
+          <div class="match-title">${g.name}</div>
+          <div class="match-meta">Games per player · ${g.gamesPerPlayer ?? 4} · Rounds · ${g.rounds ?? 5}</div>
         </div>
-        <div class="mini-badge">Backend session</div>
+        <div class="mini-badge">${g.matches && g.matches.length ? (g.matches.length+' matches') : 'No fixtures yet'}</div>
       </div>
       <div class="winner-actions">
-        <button class="winner-btn" data-action="open" data-id="${s.id}">Open as host</button>
-        <button class="winner-btn" data-action="delete" data-id="${s.id}">Delete session</button>
+        <button class="winner-btn" data-action="open" data-id="${g.id}">Open as host</button>
+        <button class="winner-btn" data-action="delete" data-id="${g.id}">Delete session</button>
       </div>`;
     list.appendChild(card);
   });
@@ -952,28 +934,38 @@ async function renderMasterList(){
     btn.addEventListener('click', async ()=>{
       const id=btn.dataset.id;
       const action=btn.dataset.action;
-      console.log('Admin button clicked', action, id);
-
       if(action==='delete'){
         try {
-          const res = await fetch(API_BASE + "/sessions/" + id, { method: "DELETE" });
+          // IMPORTANT: delete via query param id (backend must support this)
+          const res = await fetch(
+            API_BASE + "/sessions?id=" + encodeURIComponent(id),
+            { method: "DELETE" }
+          );
           if (!res.ok) {
             return setError('masterError','Delete failed (' + res.status + ').');
           }
-          setError('masterError','Session deleted.');
+          // remove locally too
+          state.games = state.games.filter(g => String(g.id) !== String(id));
+          if (String(state.currentGameId) === String(id)) state.currentGameId = null;
+          setError('masterError','Session deleted from backend.');
         } catch (e) {
           console.error('Delete error:', e);
           return setError('masterError','Network error deleting session.');
         }
-        await renderMasterList();
-        await refreshJoinSelect();
-      }else if(action==='open'){
-        state.currentGameId = id;
-        state.mode = 'admin';
-        state.master = true;
-        setError('masterError','');
+        renderMasterList();
         renderTop();
-        setScreen('fixtures');
+        // refresh join list from backend
+        refreshJoinSelect();
+      }else if(action==='open'){
+        state.currentGameId=id;
+        state.mode='admin';
+        setError('masterError','');
+        const game=currentGame();
+        if(game && game.matches && game.matches.length){
+          showFixtures(game);
+        } else {
+          setScreen('team');
+        }
       }
     });
   });
