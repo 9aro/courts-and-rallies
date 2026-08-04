@@ -6,93 +6,93 @@
 <title>Courts & Rallies • Fair Fixtures</title>
 <style>
 :root {
-  --bg: #050609;
-  --surface: #101318;
-  --surface-soft: #181B21;
+--bg: #050609;
+--surface: #101318;
+--surface-soft: #181B21;
 
-  --glass-light: rgba(255,255,255,0.06);
-  --glass-strong: rgba(255,255,255,0.12);
+--glass-light: rgba(255,255,255,0.06);
+--glass-strong: rgba(255,255,255,0.12);
 
-  --text: #F9FAFB;
-  --muted: #9CA3AF;
+--text: #F9FAFB;
+--muted: #9CA3AF;
 
-  --border: rgba(31,41,55,0.65);
+--border: rgba(31,41,55,0.65);
 
-  --accent: #FF7A1A;
-  --accent-soft: #FF9E45;
+--accent: #FF7A1A;
+--accent-soft: #FF9E45;
 
-  --control: #E5E7EB;
-  --control-track: rgba(31,41,55,0.85);
+--control: #E5E7EB;
+--control-track: rgba(31,41,55,0.85);
 
-  --shadow: 0 28px 60px rgba(0,0,0,0.9);
-  --radius: 32px;
-  --radius-sm: 20px;
+--shadow: 0 28px 60px rgba(0,0,0,0.9);
+--radius: 32px;
+--radius-sm: 20px;
 }
 
 /* Base */
 *{box-sizing:border-box;}
 body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.03), transparent 55%),
-    linear-gradient(180deg, #020408 0%, #050609 100%);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  padding: 18px 14px 28px;
+margin: 0;
+min-height: 100vh;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+background:
+radial-gradient(circle at top, rgba(255,255,255,0.03), transparent 55%),
+linear-gradient(180deg, #020408 0%, #050609 100%);
+color: var(--text);
+-webkit-font-smoothing: antialiased;
+padding: 18px 14px 28px;
 }
 
 .app{max-width:480px;margin:0 auto;}
 
 .topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:14px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+margin-bottom:14px;
 }
 
 .mode-badge,.pill,.mini-badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:999px;
-  background:var(--glass-light);
-  color:var(--muted);
-  border:1px solid rgba(255,255,255,0.06);
-  padding:8px 12px;
-  font-size:13px;
-  font-weight:600;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+border-radius:999px;
+background:var(--glass-light);
+color:var(--muted);
+border:1px solid rgba(255,255,255,0.06);
+padding:8px 12px;
+font-size:13px;
+font-weight:600;
 }
 
 .mode-badge{padding:10px 16px;font-size:14px;}
 
 /* Screens */
 .screen{
-  background:
-    linear-gradient(180deg, rgba(24,27,33,0.96) 0%, rgba(14,16,19,0.98) 100%);
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow:
-    0 26px 60px rgba(0,0,0,0.9),
-    inset 0 0 0 0.5px rgba(255,255,255,0.03);
-  padding: 22px 18px 20px;
-  margin-bottom: 16px;
+background:
+linear-gradient(180deg, rgba(24,27,33,0.96) 0%, rgba(14,16,19,0.98) 100%);
+border-radius: var(--radius);
+border: 1px solid rgba(255,255,255,0.04);
+box-shadow:
+0 26px 60px rgba(0,0,0,0.9),
+inset 0 0 0 0.5px rgba(255,255,255,0.03);
+padding: 22px 18px 20px;
+margin-bottom: 16px;
 }
 
 /* Typography */
 .title{
-  margin:0;
-  font-size:26px;
-  line-height:1.1;
-  letter-spacing:-0.02em;
+margin:0;
+font-size:26px;
+line-height:1.1;
+letter-spacing:-0.02em;
 }
 .subtitle{
-  margin:8px 0 0;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
+margin:8px 0 0;
+color:var(--muted);
+font-size:13px;
+line-height:1.5;
 }
 
 .section{margin-top:18px;}
@@ -100,45 +100,45 @@ body {
 
 /* Buttons */
 .btn{
-  width:100%;
-  min-height:54px;
-  border-radius:18px;
-  border:0;
-  padding:14px 18px;
-  font-size:16px;
-  font-weight:600;
-  color:#0B0E13;
-  background:
-    linear-gradient(180deg, #FF9E45 0%, #FF7A1A 55%, #D9580A 100%);
-  box-shadow:
-    0 18px 40px rgba(0,0,0,0.9),
-    inset 0 1px 0 rgba(255,255,255,0.6);
-  cursor:pointer;
-  transition:transform .12s ease,box-shadow .12s ease,opacity .12s ease;
+width:100%;
+min-height:54px;
+border-radius:18px;
+border:0;
+padding:14px 18px;
+font-size:16px;
+font-weight:600;
+color:#0B0E13;
+background:
+linear-gradient(180deg, #FF9E45 0%, #FF7A1A 55%, #D9580A 100%);
+box-shadow:
+0 18px 40px rgba(0,0,0,0.9),
+inset 0 1px 0 rgba(255,255,255,0.6);
+cursor:pointer;
+transition:transform .12s ease,box-shadow .12s ease,opacity .12s ease;
 }
 .btn:active{
-  transform:translateY(1px) scale(0.99);
-  box-shadow:
-    0 12px 26px rgba(0,0,0,1),
-    inset 0 1px 0 rgba(255,255,255,0.4);
+transform:translateY(1px) scale(0.99);
+box-shadow:
+0 12px 26px rgba(0,0,0,1),
+inset 0 1px 0 rgba(255,255,255,0.4);
 }
 .btn.secondary{
-  background:
-    linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
-  color:#F9FAFB;
-  border:0;
-  box-shadow:
-    0 14px 28px rgba(0,0,0,0.85),
-    inset 0 1px 0 rgba(255,255,255,0.08);
+background:
+linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
+color:#F9FAFB;
+border:0;
+box-shadow:
+0 14px 28px rgba(0,0,0,0.85),
+inset 0 1px 0 rgba(255,255,255,0.08);
 }
 .btn.ghost{
-  background:
-    linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
-  color:#F9FAFB;
-  border:0;
-  box-shadow:
-    0 14px 28px rgba(0,0,0,0.85),
-    inset 0 1px 0 rgba(255,255,255,0.08);
+background:
+linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
+color:#F9FAFB;
+border:0;
+box-shadow:
+0 14px 28px rgba(0,0,0,0.85),
+inset 0 1px 0 rgba(255,255,255,0.08);
 }
 .btn.small{min-height:48px;font-size:15px;}
 .btn:disabled{opacity:0.4;cursor:not-allowed;box-shadow:none;}
@@ -147,96 +147,96 @@ body {
 .field{display:grid;gap:8px;}
 label{font-size:13px;font-weight:600;color:var(--muted);}
 input,select{
-  width:100%;
-  min-height:48px;
-  padding:12px 14px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,0.06);
-  background:
-    linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
-  color:var(--text);
-  font-size:15px;
-  outline:none;
+width:100%;
+min-height:48px;
+padding:12px 14px;
+border-radius:16px;
+border:1px solid rgba(255,255,255,0.06);
+background:
+linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
+color:var(--text);
+font-size:15px;
+outline:none;
 }
 input::placeholder{color:#6B7280;}
 input:focus,select:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 1px rgba(255,122,26,0.7);
+border-color:var(--accent);
+box-shadow:0 0 0 1px rgba(255,122,26,0.7);
 }
 
 /* Segmented control */
 .segmented{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  background:
-    linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
-  padding:6px;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,0.04);
-  box-shadow:
-    0 12px 24px rgba(0,0,0,0.7),
-    inset 0 1px 0 rgba(255,255,255,0.04);
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+background:
+linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
+padding:6px;
+border-radius:20px;
+border:1px solid rgba(255,255,255,0.04);
+box-shadow:
+0 12px 24px rgba(0,0,0,0.7),
+inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .segmented button{
-  min-height:42px;
-  border:0;
-  border-radius:14px;
-  background:transparent;
-  color:var(--muted);
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
+min-height:42px;
+border:0;
+border-radius:14px;
+background:transparent;
+color:var(--muted);
+font-size:14px;
+font-weight:600;
+cursor:pointer;
 }
 .segmented button.active{
-  background:
-    linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
-  color:#F9FAFB;
+background:
+linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
+color:#F9FAFB;
 }
 
 /* Cards & slots */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
 .card{
-  position:relative;
-  background:
-    linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
-  border-radius:24px;
-  border:1px solid rgba(255,255,255,0.04);
-  box-shadow:
-    0 16px 32px rgba(0,0,0,0.8),
-    inset 0 0 0 0.5px rgba(255,255,255,0.02);
-  padding:14px;
+position:relative;
+background:
+linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
+border-radius:24px;
+border:1px solid rgba(255,255,255,0.04);
+box-shadow:
+0 16px 32px rgba(0,0,0,0.8),
+inset 0 0 0 0.5px rgba(255,255,255,0.02);
+padding:14px;
 }
 .card::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:1px;
-  border-radius:inherit;
-  background:linear-gradient(90deg,rgba(255,255,255,0.22),transparent);
-  opacity:0.7;
+content:"";
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:1px;
+border-radius:inherit;
+background:linear-gradient(90deg,rgba(255,255,255,0.22),transparent);
+opacity:0.7;
 }
 .card h4{
-  margin:0 0 10px;
-  font-size:15px;
-  font-weight:600;
+margin:0 0 10px;
+font-size:15px;
+font-weight:600;
 }
 
 .slot,
 .team-line{
-  background:
-    linear-gradient(180deg, rgba(36,40,47,0.96) 0%, rgba(22,24,29,0.98) 100%);
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,0.03);
-  box-shadow:
-    0 10px 20px rgba(0,0,0,0.7),
-    inset 0 0 0 0.5px rgba(255,255,255,0.02);
-  padding:10px 12px;
-  margin-bottom:10px;
-  font-size:14px;
+background:
+linear-gradient(180deg, rgba(36,40,47,0.96) 0%, rgba(22,24,29,0.98) 100%);
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.03);
+box-shadow:
+0 10px 20px rgba(0,0,0,0.7),
+inset 0 0 0 0.5px rgba(255,255,255,0.02);
+padding:10px 12px;
+margin-bottom:10px;
+font-size:14px;
 }
 .slot:last-child{margin-bottom:0;}
 .slot .name{font-weight:600;color:var(--text);}
@@ -247,52 +247,52 @@ input:focus,select:focus{
 /* Badges */
 .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
 .pill{
-  padding:7px 12px;
-  font-size:13px;
-  font-weight:600;
-  background:var(--glass-light);
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.06);
+padding:7px 12px;
+font-size:13px;
+font-weight:600;
+background:var(--glass-light);
+border-radius:999px;
+border:1px solid rgba(255,255,255,0.06);
 }
 .mini-badge{
-  padding:6px 10px;
-  font-size:12px;
-  font-weight:600;
-  background:var(--glass-light);
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.06);
+padding:6px 10px;
+font-size:12px;
+font-weight:600;
+background:var(--glass-light);
+border-radius:999px;
+border:1px solid rgba(255,255,255,0.06);
 }
 
 /* Matches */
 .match-list{display:grid;gap:12px;margin-top:16px;}
 .match-card{
-  position:relative;
-  background:
-    linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
-  border-radius:24px;
-  border:1px solid rgba(255,255,255,0.04);
-  box-shadow:
-    0 16px 32px rgba(0,0,0,0.8),
-    inset 0 0 0 0.5px rgba(255,255,255,0.02);
-  padding:14px;
+position:relative;
+background:
+linear-gradient(180deg, rgba(32,35,42,0.96) 0%, rgba(20,22,27,0.98) 100%);
+border-radius:24px;
+border:1px solid rgba(255,255,255,0.04);
+box-shadow:
+0 16px 32px rgba(0,0,0,0.8),
+inset 0 0 0 0.5px rgba(255,255,255,0.02);
+padding:14px;
 }
 .match-card::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:1px;
-  border-radius:inherit;
-  background:linear-gradient(90deg,rgba(255,255,255,0.22),transparent);
-  opacity:0.7;
+content:"";
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:1px;
+border-radius:inherit;
+background:linear-gradient(90deg,rgba(255,255,255,0.22),transparent);
+opacity:0.7;
 }
 .match-head{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  align-items:flex-start;
-  margin-bottom:12px;
+display:flex;
+justify-content:space-between;
+gap:8px;
+align-items:flex-start;
+margin-bottom:12px;
 }
 .match-title{font-size:15px;font-weight:600;}
 .match-meta{font-size:12px;color:var(--muted);margin-top:2px;}
@@ -303,28 +303,28 @@ input:focus,select:focus{
 .winner-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 
 .winner-btn{
-  width:100%;
-  min-height:48px;
-  border-radius:18px;
-  border:0;
-  padding:12px 14px;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  background:
-    linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
-  color:#F9FAFB;
-  box-shadow:
-    0 12px 24px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.08);
+width:100%;
+min-height:48px;
+border-radius:18px;
+border:0;
+padding:12px 14px;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+background:
+linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
+color:#F9FAFB;
+box-shadow:
+0 12px 24px rgba(0,0,0,0.8),
+inset 0 1px 0 rgba(255,255,255,0.08);
 }
 .winner-btn.primary{
-  background:
-    linear-gradient(180deg, #FF9E45 0%, #FF7A1A 55%, #D9580A 100%);
-  color:#0B0E13;
-  box-shadow:
-    0 18px 40px rgba(0,0,0,1),
-    inset 0 1px 0 rgba(255,255,255,0.6);
+background:
+linear-gradient(180deg, #FF9E45 0%, #FF7A1A 55%, #D9580A 100%);
+color:#0B0E13;
+box-shadow:
+0 18px 40px rgba(0,0,0,1),
+inset 0 1px 0 rgba(255,255,255,0.6);
 }
 .winner-btn.disabled{opacity:0.35;cursor:not-allowed;box-shadow:none;}
 
@@ -334,251 +334,251 @@ input:focus,select:focus{
 .score{font-size:26px;font-weight:700;margin-top:4px;}
 
 .result{
-  margin-top:14px;
-  padding:14px;
-  border-radius:24px;
-  background:
-    linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
-  border:1px solid rgba(255,255,255,0.04);
-  box-shadow:
-    0 12px 24px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-  font-weight:600;
-  font-size:14px;
+margin-top:14px;
+padding:14px;
+border-radius:24px;
+background:
+linear-gradient(180deg, rgba(38,40,45,0.96) 0%, rgba(22,24,29,0.98) 100%);
+border:1px solid rgba(255,255,255,0.04);
+box-shadow:
+0 12px 24px rgba(0,0,0,0.8),
+inset 0 1px 0 rgba(255,255,255,0.08);
+font-weight:600;
+font-size:14px;
 }
 
 /* Misc */
 .muted{color:var(--muted);}
 .hidden{display:none !important;}
 .error{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:18px;
-  background:rgba(127,29,29,0.3);
-  border:1px solid rgba(248,113,113,0.9);
-  color:#FCA5A5;
-  font-size:13px;
+margin-top:10px;
+padding:10px 12px;
+border-radius:18px;
+background:rgba(127,29,29,0.3);
+border:1px solid rgba(248,113,113,0.9);
+color:#FCA5A5;
+font-size:13px;
 }
 
 @media(max-width:420px){
-  .title{font-size:24px;}
-  .grid-2,.summary,.winner-actions{grid-template-columns:1fr;}
+.title{font-size:24px;}
+.grid-2,.summary,.winner-actions{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="topbar">
-    <div class="mode-badge" id="modeBadge">Admin mode</div>
-    <div class="mini-badge" id="gameBadge">No session selected</div>
-  </div>
-
-  <!-- Home -->
-  <div class="screen" id="homeScreen">
-    <h1 class="title">Courts & Rallies</h1>
-    <p class="subtitle">Set up doubles on two courts with perfectly fair fixtures and zero spreadsheet drama.</p>
-    <div class="section">
-      <p class="subtitle">Step 1 · How do you want to start?</p>
-    </div>
-    <div class="home-actions row">
-      <button class="btn" id="goCreate">Host a session</button>
-      <button class="btn secondary" id="goJoin">Join a session</button>
-      <button class="btn secondary" id="goMaster">Admin</button>
-    </div>
-  </div>
-
-  <!-- Create Game -->
-  <div class="screen hidden" id="createScreen">
-    <h2 class="title">Host a new session</h2>
-    <p class="subtitle">Name it, lock it, and you’re in charge of teams, fixtures, and scores.</p>
-    <div class="section row">
-      <div class="field">
-        <label>Session name</label>
-        <input id="createName" type="text" placeholder="Sunday Doubles" />
-      </div>
-      <div class="field">
-        <label>Admin passcode</label>
-        <input id="createPassword" type="password" placeholder="Keep this to yourself" />
-      </div>
-      <button class="btn" id="createContinue">Create & continue</button>
-      <button class="btn secondary" id="createBack">Back to home</button>
-    </div>
-    <div class="error hidden" id="createError"></div>
-  </div>
-
-  <!-- Join Game -->
-  <div class="screen hidden" id="joinScreen">
-    <h2 class="title">Join a session</h2>
-    <p class="subtitle">Hop in, see the fixtures, and follow the scores. Only the host can make changes.</p>
-    <div class="section row">
-      <div class="field">
-        <label>Available sessions</label>
-        <select id="joinGameSelect"></select>
-      </div>
-      <div class="field">
-        <label>Your name</label>
-        <input id="joinName" type="text" placeholder="Enter your name" />
-      </div>
-      <button class="btn" id="joinContinue">Join & view matches</button>
-      <button class="btn secondary" id="joinBack">Back to home</button>
-    </div>
-    <div class="error hidden" id="joinError"></div>
-  </div>
-
-  <!-- Admin (formerly master admin) -->
-  <div class="screen hidden" id="masterScreen">
-    <h2 class="title">Admin</h2>
-    <p class="subtitle">Edit or delete any session. Use this only when you mean it.</p>
-
-    <div class="section row" id="masterLoginSection">
-      <div class="field">
-        <label>Admin passcode</label>
-        <input id="masterPassword" type="password" placeholder="Enter passcode" />
-      </div>
-      <button class="btn" id="masterLogin">Unlock admin</button>
-      <button class="btn secondary" id="masterBack">Back to home</button>
-      <div class="error hidden" id="masterError"></div>
-    </div>
-
-    <div class="section hidden" id="masterContent">
-  <div class="subtitle">Sessions on the server</div>
-  <div class="match-list" id="masterGameList"></div>
+<div class="topbar">
+<div class="mode-badge" id="modeBadge">Admin mode</div>
+<div class="mini-badge" id="gameBadge">No session selected</div>
 </div>
-  </div>
 
-  <!-- Team Setup -->
-  <div class="screen hidden" id="teamScreen">
-    <h2 class="title">Teams & players</h2>
-    <p class="subtitle">Step 2 · Lock in squads and games per player. Teams stay fixed, partners keep rotating.</p>
+<!-- Home -->
+<div class="screen" id="homeScreen">
+<h1 class="title">Courts & Rallies</h1>
+<p class="subtitle">Set up doubles on two courts with perfectly fair fixtures and zero spreadsheet drama.</p>
+<div class="section">
+<p class="subtitle">Step 1 · How do you want to start?</p>
+</div>
+<div class="home-actions row">
+<button class="btn" id="goCreate">Host a session</button>
+<button class="btn secondary" id="goJoin">Join a session</button>
+<button class="btn secondary" id="goMaster">Admin</button>
+</div>
+</div>
 
-    <div class="section">
-      <div class="segmented">
-        <button id="modeRandom" class="active">Shuffle teams</button>
-        <button id="modeManual">Choose teams</button>
-      </div>
-    </div>
+<!-- Create Game -->
+<div class="screen hidden" id="createScreen">
+<h2 class="title">Host a new session</h2>
+<p class="subtitle">Name it, lock it, and you’re in charge of teams, fixtures, and scores.</p>
+<div class="section row">
+<div class="field">
+<label>Session name</label>
+<input id="createName" type="text" placeholder="Sunday Doubles" />
+</div>
+<div class="field">
+<label>Admin passcode</label>
+<input id="createPassword" type="password" placeholder="Keep this to yourself" />
+</div>
+<button class="btn" id="createContinue">Create & continue</button>
+<button class="btn secondary" id="createBack">Back to home</button>
+</div>
+<div class="error hidden" id="createError"></div>
+</div>
 
-    <div class="section grid-2">
-      <div class="field">
-        <label>Team 1 name</label>
-        <input id="team1Name" type="text" placeholder="Baseline Crew" />
-      </div>
-      <div class="field">
-        <label>Team 2 name</label>
-        <input id="team2Name" type="text" placeholder="Kitchen Kings" />
-      </div>
-    </div>
+<!-- Join Game -->
+<div class="screen hidden" id="joinScreen">
+<h2 class="title">Join a session</h2>
+<p class="subtitle">Hop in, see the fixtures, and follow the scores. Only the host can make changes.</p>
+<div class="section row">
+<div class="field">
+<label>Available sessions</label>
+<select id="joinGameSelect"></select>
+</div>
+<div class="field">
+<label>Your name</label>
+<input id="joinName" type="text" placeholder="Enter your name" />
+</div>
+<button class="btn" id="joinContinue">Join & view matches</button>
+<button class="btn secondary" id="joinBack">Back to home</button>
+</div>
+<div class="error hidden" id="joinError"></div>
+</div>
 
-    <div class="section" id="randomInputsWrap">
-      <div class="card">
-        <h4>Players for this session</h4>
-        <div id="randomInputs"></div>
-      </div>
-    </div>
+<!-- Admin (formerly master admin) -->
+<div class="screen hidden" id="masterScreen">
+<h2 class="title">Admin</h2>
+<p class="subtitle">Edit or delete any session. Use this only when you mean it.</p>
 
-    <div class="section hidden" id="manualInputsWrap">
-      <div class="grid-2">
-        <div class="card">
-          <h4>Team 1 roster</h4>
-          <div id="manualTeam1Inputs"></div>
-        </div>
-        <div class="card">
-          <h4>Team 2 roster</h4>
-          <div id="manualTeam2Inputs"></div>
-        </div>
-      </div>
-    </div>
+<div class="section row" id="masterLoginSection">
+<div class="field">
+<label>Admin passcode</label>
+<input id="masterPassword" type="password" placeholder="Enter passcode" />
+</div>
+<button class="btn" id="masterLogin">Unlock admin</button>
+<button class="btn secondary" id="masterBack">Back to home</button>
+<div class="error hidden" id="masterError"></div>
+</div>
 
-    <div class="section hidden" id="teamsCardsWrap">
-      <div class="grid-2">
-        <div class="card">
-          <h4 id="team1CardTitle">Team 1 lineup</h4>
-          <div id="team1Slots"></div>
-        </div>
-        <div class="card">
-          <h4 id="team2CardTitle">Team 2 lineup</h4>
-          <div id="team2Slots"></div>
-        </div>
-      </div>
-    </div>
+<div class="section hidden" id="masterContent">
+<div class="subtitle">Sessions on this device</div>
+<div class="match-list" id="masterGameList"></div>
+</div>
+</div>
 
-    <!-- Keep games/rounds as editable (current behavior) -->
-    <div class="section grid-2">
-      <div class="field">
-        <label>Games per player</label>
-        <input id="gamesPerPlayer" type="number" min="1" max="9" value="4" />
-      </div>
-      <div class="field">
-        <label>Rounds (auto-calculated)</label>
-        <input id="calculatedRoundsTeam" type="text" readonly value="5" />
-      </div>
-    </div>
+<!-- Team Setup -->
+<div class="screen hidden" id="teamScreen">
+<h2 class="title">Teams & players</h2>
+<p class="subtitle">Step 2 · Lock in squads and games per player. Teams stay fixed, partners keep rotating.</p>
 
-    <div class="section row">
-      <button class="btn ghost" id="randomAssign">Shuffle into teams</button>
-      <button class="btn" id="continueFixtures">Build fixtures</button>
-      <button class="btn secondary" id="teamBack">Back to session</button>
-    </div>
-    <div class="error hidden" id="teamError"></div>
-  </div>
+<div class="section">
+<div class="segmented">
+<button id="modeRandom" class="active">Shuffle teams</button>
+<button id="modeManual">Choose teams</button>
+</div>
+</div>
 
-  <!-- Fixtures -->
-  <div class="screen hidden" id="fixturesScreen">
-    <h2 class="title">Fixtures & results</h2>
-    <p class="subtitle">Step 3 · Play through the matches and tap who won. The schedule won’t change.</p>
+<div class="section grid-2">
+<div class="field">
+<label>Team 1 name</label>
+<input id="team1Name" type="text" placeholder="Baseline Crew" />
+</div>
+<div class="field">
+<label>Team 2 name</label>
+<input id="team2Name" type="text" placeholder="Kitchen Kings" />
+</div>
+</div>
 
-    <div class="section badge-row">
-      <div class="pill">Courts · 2</div>
-      <div class="pill">Games per player · <span id="gamesPerPlayerPill">4</span></div>
-      <div class="pill">Rounds · <span id="roundsPill">5</span></div>
-    </div>
+<div class="section" id="randomInputsWrap">
+<div class="card">
+<h4>Players for this session</h4>
+<div id="randomInputs"></div>
+</div>
+</div>
 
-    <div class="section row">
-      <button class="btn secondary hidden" id="backToTeamSetup">Back to team setup</button>
-      <button class="btn secondary hidden" id="resetScores">Reset match results</button>
-    </div>
+<div class="section hidden" id="manualInputsWrap">
+<div class="grid-2">
+<div class="card">
+<h4>Team 1 roster</h4>
+<div id="manualTeam1Inputs"></div>
+</div>
+<div class="card">
+<h4>Team 2 roster</h4>
+<div id="manualTeam2Inputs"></div>
+</div>
+</div>
+</div>
 
-    <div class="section summary">
-      <div class="card">
-        <div class="muted" id="team1SummaryName">Team 1</div>
-        <div class="score" id="team1Score">0</div>
-        <div class="muted" id="team1Label">Team 1 wins</div>
-      </div>
-      <div class="card">
-        <div class="muted" id="team2SummaryName">Team 2</div>
-        <div class="score" id="team2Score">0</div>
-        <div class="muted" id="team2Label">Team 2 wins</div>
-      </div>
-    </div>
+<div class="section hidden" id="teamsCardsWrap">
+<div class="grid-2">
+<div class="card">
+<h4 id="team1CardTitle">Team 1 lineup</h4>
+<div id="team1Slots"></div>
+</div>
+<div class="card">
+<h4 id="team2CardTitle">Team 2 lineup</h4>
+<div id="team2Slots"></div>
+</div>
+</div>
+</div>
 
-    <div class="result" id="winnerText">Overall winner · TBD</div>
-    <div class="result hidden" id="finalResult"></div>
+<!-- Keep games/rounds as editable (current behavior) -->
+<div class="section grid-2">
+<div class="field">
+<label>Games per player</label>
+<input id="gamesPerPlayer" type="number" min="1" max="9" value="4" />
+</div>
+<div class="field">
+<label>Rounds (auto-calculated)</label>
+<input id="calculatedRoundsTeam" type="text" readonly value="5" />
+</div>
+</div>
 
-    <div class="match-list" id="matchList"></div>
-    <div class="error hidden" id="fixturesError"></div>
-  </div>
+<div class="section row">
+<button class="btn ghost" id="randomAssign">Shuffle into teams</button>
+<button class="btn" id="continueFixtures">Build fixtures</button>
+<button class="btn secondary" id="teamBack">Back to session</button>
+</div>
+<div class="error hidden" id="teamError"></div>
+</div>
+
+<!-- Fixtures -->
+<div class="screen hidden" id="fixturesScreen">
+<h2 class="title">Fixtures & results</h2>
+<p class="subtitle">Step 3 · Play through the matches and tap who won. The schedule won’t change.</p>
+
+<div class="section badge-row">
+<div class="pill">Courts · 2</div>
+<div class="pill">Games per player · <span id="gamesPerPlayerPill">4</span></div>
+<div class="pill">Rounds · <span id="roundsPill">5</span></div>
+</div>
+
+<div class="section row">
+<button class="btn secondary hidden" id="backToTeamSetup">Back to team setup</button>
+<button class="btn secondary hidden" id="resetScores">Reset match results</button>
+</div>
+
+<div class="section summary">
+<div class="card">
+<div class="muted" id="team1SummaryName">Team 1</div>
+<div class="score" id="team1Score">0</div>
+<div class="muted" id="team1Label">Team 1 wins</div>
+</div>
+<div class="card">
+<div class="muted" id="team2SummaryName">Team 2</div>
+<div class="score" id="team2Score">0</div>
+<div class="muted" id="team2Label">Team 2 wins</div>
+</div>
+</div>
+
+<div class="result" id="winnerText">Overall winner · TBD</div>
+<div class="result hidden" id="finalResult"></div>
+
+<div class="match-list" id="matchList"></div>
+<div class="error hidden" id="fixturesError"></div>
+</div>
 </div>
 
 <script>
- 
+
 const API_BASE = "https://courts-and-rallies.onrender.com";
 
 const state = {
-  mode: 'admin',
-  master: false,
-  screen: 'home',
-  games: [],
-  currentGameId: null,
-  assignmentMode: 'random'
+mode: 'admin',
+master: false,
+screen: 'home',
+games: [],
+currentGameId: null,
+assignmentMode: 'random'
 };
 const MASTER_PASS = 'pickleball';
 
 const el=id=>document.getElementById(id);
 const randomInputs = [],
-      manualTeam1Inputs = [],
-      manualTeam2Inputs = [],
-      t1Slots = [],
-      t2Slots = [];
+manualTeam1Inputs = [],
+manualTeam2Inputs = [],
+t1Slots = [],
+t2Slots = [];
 
 function uid(){return 'g_'+Math.random().toString(36).slice(2,9);}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -586,27 +586,28 @@ function currentGame(){return state.games.find(g=>g.id===state.currentGameId)||n
 function setError(id,msg){const box=el(id);box.textContent=msg||'';box.classList.toggle('hidden',!msg);}
 
 function setScreen(name){
-  state.screen=name;
-  ['homeScreen','createScreen','joinScreen','masterScreen','teamScreen','fixturesScreen']
-    .forEach(s=>el(s).classList.add('hidden'));
-  el(name+'Screen').classList.remove('hidden');
-  renderTop();
+state.screen=name;
+['homeScreen','createScreen','joinScreen','masterScreen','teamScreen','fixturesScreen']
+.forEach(s=>el(s).classList.add('hidden'));
+el(name+'Screen').classList.remove('hidden');
+renderTop();
 }
 function renderTop(){
-  const modeLabel = state.master
-    ? 'Admin (all sessions)'
-    : (state.mode==='admin'?'Admin mode':'Viewer mode');
-  el('modeBadge').textContent=modeLabel;
-  const g=currentGame();
-  el('gameBadge').textContent=g?g.name:'No session selected';
-  const adminLike = state.mode==='admin' || state.master;
-  el('backToTeamSetup').classList.toggle('hidden',!adminLike);
-  el('resetScores').classList.toggle('hidden',!adminLike);
+const modeLabel = state.master
+? 'Admin (all sessions)'
+: (state.mode==='admin'?'Admin mode':'Viewer mode');
+el('modeBadge').textContent=modeLabel;
+const g=currentGame();
+el('gameBadge').textContent=g?g.name:'No session selected';
+const adminLike = state.mode==='admin' || state.master;
+el('backToTeamSetup').classList.toggle('hidden',!adminLike);
+el('resetScores').classList.toggle('hidden',!adminLike);
 }
- el('createBack').onclick = () => { setScreen('home'); };
+el('createBack').onclick = () => { setScreen('home'); };
 el('joinBack').onclick = () => { setScreen('home'); };
 el('masterBack').onclick = () => { setScreen('home'); };
 
+  
   el('joinContinue').onclick = () => {
   const sel = el('joinGameSelect');
   const gameId = sel.value;
@@ -633,230 +634,266 @@ el('masterBack').onclick = () => { setScreen('home'); };
 };
 /* Inputs */
 function buildRandomInputs(){
-  const wrap=el('randomInputs');wrap.innerHTML='';randomInputs.length=0;
-  for(let i=1;i<=10;i++){
-    const field=document.createElement('div');field.className='field';
-    const lab=document.createElement('label');lab.textContent='Player #'+i;
-    const inp=document.createElement('input');inp.type='text';inp.placeholder='Player '+i;
-    randomInputs.push(inp);field.appendChild(lab);field.appendChild(inp);wrap.appendChild(field);
-  }
+const wrap=el('randomInputs');wrap.innerHTML='';randomInputs.length=0;
+for(let i=1;i<=10;i++){
+const field=document.createElement('div');field.className='field';
+const lab=document.createElement('label');lab.textContent='Player #'+i;
+const inp=document.createElement('input');inp.type='text';inp.placeholder='Player '+i;
+randomInputs.push(inp);field.appendChild(lab);field.appendChild(inp);wrap.appendChild(field);
+}
 }
 function buildManualInputs(){
-  const t1Wrap=el('manualTeam1Inputs'),t2Wrap=el('manualTeam2Inputs');
-  t1Wrap.innerHTML='';t2Wrap.innerHTML='';manualTeam1Inputs.length=0;manualTeam2Inputs.length=0;
-  for(let i=1;i<=5;i++){
-    const f1=document.createElement('div');f1.className='field';
-    const l1=document.createElement('label');l1.textContent='T1-P'+i;
-    const in1=document.createElement('input');in1.type='text';in1.placeholder='Player '+i;
-    manualTeam1Inputs.push(in1);f1.appendChild(l1);f1.appendChild(in1);t1Wrap.appendChild(f1);
-    const f2=document.createElement('div');f2.className='field';
-    const l2=document.createElement('label');l2.textContent='T2-P'+i;
-    const in2=document.createElement('input');in2.type='text';in2.placeholder='Player '+(i+5);
-    manualTeam2Inputs.push(in2);f2.appendChild(l2);f2.appendChild(in2);t2Wrap.appendChild(f2);
-  }
-  const updatePreview=()=>{
-    const team1=manualTeam1Inputs.map(i=>i.value.trim()).slice(0,5);
-    const team2=manualTeam2Inputs.map(i=>i.value.trim()).slice(0,5);
-    buildTeamSlots();updateTeamPreview(team1,team2);
-  };
-  manualTeam1Inputs.concat(manualTeam2Inputs).forEach(inp=>inp.addEventListener('input',()=>{if(state.assignmentMode==='manual')updatePreview();}));
+const t1Wrap=el('manualTeam1Inputs'),t2Wrap=el('manualTeam2Inputs');
+t1Wrap.innerHTML='';t2Wrap.innerHTML='';manualTeam1Inputs.length=0;manualTeam2Inputs.length=0;
+for(let i=1;i<=5;i++){
+const f1=document.createElement('div');f1.className='field';
+const l1=document.createElement('label');l1.textContent='T1-P'+i;
+const in1=document.createElement('input');in1.type='text';in1.placeholder='Player '+i;
+manualTeam1Inputs.push(in1);f1.appendChild(l1);f1.appendChild(in1);t1Wrap.appendChild(f1);
+const f2=document.createElement('div');f2.className='field';
+const l2=document.createElement('label');l2.textContent='T2-P'+i;
+const in2=document.createElement('input');in2.type='text';in2.placeholder='Player '+(i+5);
+manualTeam2Inputs.push(in2);f2.appendChild(l2);f2.appendChild(in2);t2Wrap.appendChild(f2);
+}
+const updatePreview=()=>{
+const team1=manualTeam1Inputs.map(i=>i.value.trim()).slice(0,5);
+const team2=manualTeam2Inputs.map(i=>i.value.trim()).slice(0,5);
+buildTeamSlots();updateTeamPreview(team1,team2);
+};
+manualTeam1Inputs.concat(manualTeam2Inputs).forEach(inp=>inp.addEventListener('input',()=>{if(state.assignmentMode==='manual')updatePreview();}));
 }
 function buildTeamSlots(){
-  const s1=el('team1Slots'),s2=el('team2Slots');
-  s1.innerHTML='';s2.innerHTML='';t1Slots.length=0;t2Slots.length=0;
-  for(let i=1;i<=5;i++){
-    const a=document.createElement('div');a.className='slot';
-    a.innerHTML=`<div><div class="label">T1-P${i}</div><div class="name" id="t1p${i}">—</div></div>`;
-    const b=document.createElement('div');b.className='slot';
-    b.innerHTML=`<div><div class="label">T2-P${i}</div><div class="name" id="t2p${i}">—</div></div>`;
-    s1.appendChild(a);s2.appendChild(b);t1Slots.push(el('t1p'+i));t2Slots.push(el('t2p'+i));
-  }
+const s1=el('team1Slots'),s2=el('team2Slots');
+s1.innerHTML='';s2.innerHTML='';t1Slots.length=0;t2Slots.length=0;
+for(let i=1;i<=5;i++){
+const a=document.createElement('div');a.className='slot';
+a.innerHTML=`<div><div class="label">T1-P${i}</div><div class="name" id="t1p${i}">—</div></div>`;
+const b=document.createElement('div');b.className='slot';
+b.innerHTML=`<div><div class="label">T2-P${i}</div><div class="name" id="t2p${i}">—</div></div>`;
+s1.appendChild(a);s2.appendChild(b);t1Slots.push(el('t1p'+i));t2Slots.push(el('t2p'+i));
+}
 }
 function updateTeamPreview(team1List,team2List){
-  for(let i=0;i<5;i++){t1Slots[i].textContent=team1List[i]||'—';t2Slots[i].textContent=team2List[i]||'—';}
-  el('teamsCardsWrap').classList.remove('hidden');
+for(let i=0;i<5;i++){t1Slots[i].textContent=team1List[i]||'—';t2Slots[i].textContent=team2List[i]||'—';}
+el('teamsCardsWrap').classList.remove('hidden');
 }
 
 /* Team assignment */
 function assignRandomToTeams(game){
-  const names=randomInputs.map(i=>i.value.trim()).filter(Boolean);
-  if(names.length!==10){setError('teamError','This format needs exactly 10 players.');return false;}
-  const shuffled=shuffle(names);
-  const team1=shuffled.slice(0,5),team2=shuffled.slice(5,10);
-  game.players=shuffled;game.team1={players:team1};game.team2={players:team2};
-  buildTeamSlots();updateTeamPreview(team1,team2);
-  setError('teamError','Players shuffled into two balanced teams.');
-  return true;
+const names=randomInputs.map(i=>i.value.trim()).filter(Boolean);
+if(names.length!==10){setError('teamError','This format needs exactly 10 players.');return false;}
+const shuffled=shuffle(names);
+const team1=shuffled.slice(0,5),team2=shuffled.slice(5,10);
+game.players=shuffled;game.team1={players:team1};game.team2={players:team2};
+buildTeamSlots();updateTeamPreview(team1,team2);
+setError('teamError','Players shuffled into two balanced teams.');
+return true;
 }
 function assignManualToTeams(game){
-  const team1=manualTeam1Inputs.map(i=>i.value.trim()).filter(Boolean).slice(0,5);
-  const team2=manualTeam2Inputs.map(i=>i.value.trim()).filter(Boolean).slice(0,5);
-  if(team1.length!==5||team2.length!==5){setError('teamError','Fill all 5 spots for both teams before you continue.');return false;}
-  game.players=[...team1,...team2];game.team1={players:team1};game.team2={players:team2};
-  buildTeamSlots();updateTeamPreview(team1,team2);
-  setError('teamError','Manual teams locked in. Nice.');
-  return true;
+const team1=manualTeam1Inputs.map(i=>i.value.trim()).filter(Boolean).slice(0,5);
+const team2=manualTeam2Inputs.map(i=>i.value.trim()).filter(Boolean).slice(0,5);
+if(team1.length!==5||team2.length!==5){setError('teamError','Fill all 5 spots for both teams before you continue.');return false;}
+game.players=[...team1,...team2];game.team1={players:team1};game.team2={players:team2};
+buildTeamSlots();updateTeamPreview(team1,team2);
+setError('teamError','Manual teams locked in. Nice.');
+return true;
 }
 
 /* Fairness engine: fixed 4 games, 5 rounds for 10 players & 2 courts */
 function buildTeamSitSchedule(teamPlayers, rounds, gamesPerPlayer){
-  const restNeeded = rounds - gamesPerPlayer;
-  const totalSitSlots = teamPlayers.length * restNeeded;
-  const sitsPerRoundBase = Math.floor(totalSitSlots / rounds);
-  const remainder = totalSitSlots % rounds;
+const restNeeded = rounds - gamesPerPlayer;
+const totalSitSlots = teamPlayers.length * restNeeded;
+const sitsPerRoundBase = Math.floor(totalSitSlots / rounds);
+const remainder = totalSitSlots % rounds;
 
-  const restQuota = {}; teamPlayers.forEach(p=>restQuota[p]=restNeeded);
-  const lastSat = {}; teamPlayers.forEach(p=>lastSat[p]=-10);
-  const sitSchedule = {};
+const restQuota = {}; teamPlayers.forEach(p=>restQuota[p]=restNeeded);
+const lastSat = {}; teamPlayers.forEach(p=>lastSat[p]=-10);
+const sitSchedule = {};
 
-  for(let r=1;r<=rounds;r++){
-    const targetSitters = sitsPerRoundBase + (r<=remainder?1:0);
-    let candidates = teamPlayers.filter(p=>restQuota[p]>0);
-    candidates = shuffle(candidates).sort((a,b)=>{
-      const aSatLast = lastSat[a]===r-1?1:0;
-      const bSatLast = lastSat[b]===r-1?1:0;
-      if(aSatLast!==bSatLast) return aSatLast-bSatLast;
-      return restQuota[b]-restQuota[a];
-    });
-    const chosen = candidates.slice(0, targetSitters);
-    chosen.forEach(p=>{restQuota[p]--; lastSat[p]=r;});
-    sitSchedule[r]=chosen;
-  }
-  return sitSchedule;
+for(let r=1;r<=rounds;r++){
+const targetSitters = sitsPerRoundBase + (r<=remainder?1:0);
+let candidates = teamPlayers.filter(p=>restQuota[p]>0);
+candidates = shuffle(candidates).sort((a,b)=>{
+const aSatLast = lastSat[a]===r-1?1:0;
+const bSatLast = lastSat[b]===r-1?1:0;
+if(aSatLast!==bSatLast) return aSatLast-bSatLast;
+return restQuota[b]-restQuota[a];
+});
+const chosen = candidates.slice(0, targetSitters);
+chosen.forEach(p=>{restQuota[p]--; lastSat[p]=r;});
+sitSchedule[r]=chosen;
+}
+return sitSchedule;
 }
 
 function buildFairScheduleFixed(team1, team2){
-  const gamesPerPlayer = 4;
-  const rounds = 5;
-  const courts = 2;
+const gamesPerPlayer = 4;
+const rounds = 5;
+const courts = 2;
 
-  const sit1 = buildTeamSitSchedule(team1, rounds, gamesPerPlayer);
-  const sit2 = buildTeamSitSchedule(team2, rounds, gamesPerPlayer);
-  const matches = [];
-  for(let r=1;r<=rounds;r++){
-    const active1 = shuffle(team1.filter(p=>!sit1[r].includes(p)));
-    const active2 = shuffle(team2.filter(p=>!sit2[r].includes(p)));
-    const pairs1 = []; for(let i=0;i<active1.length;i+=2) pairs1.push(active1.slice(i,i+2));
-    const pairs2 = []; for(let i=0;i<active2.length;i+=2) pairs2.push(active2.slice(i,i+2));
-    const courtsThisRound = Math.min(pairs1.length, pairs2.length, courts);
-    for(let c=0;c<courtsThisRound;c++){
-      matches.push({round:r,court:c+1,team1:pairs1[c],team2:pairs2[c],winner:null});
-    }
-  }
-  return {matches, rounds, gamesPerPlayer};
+const sit1 = buildTeamSitSchedule(team1, rounds, gamesPerPlayer);
+const sit2 = buildTeamSitSchedule(team2, rounds, gamesPerPlayer);
+const matches = [];
+for(let r=1;r<=rounds;r++){
+const active1 = shuffle(team1.filter(p=>!sit1[r].includes(p)));
+const active2 = shuffle(team2.filter(p=>!sit2[r].includes(p)));
+const pairs1 = []; for(let i=0;i<active1.length;i+=2) pairs1.push(active1.slice(i,i+2));
+const pairs2 = []; for(let i=0;i<active2.length;i+=2) pairs2.push(active2.slice(i,i+2));
+const courtsThisRound = Math.min(pairs1.length, pairs2.length, courts);
+for(let c=0;c<courtsThisRound;c++){
+matches.push({round:r,court:c+1,team1:pairs1[c],team2:pairs2[c],winner:null});
+}
+}
+return {matches, rounds, gamesPerPlayer};
 }
 
 function saveTeamsAndFixtures(game){
-  const result = buildFairScheduleFixed(game.team1.players, game.team2.players);
-  if(!result || result.rounds!==5){
-    setError('teamError','Format is fixed at 10 players, 2 courts, 4 games each over 5 rounds.');
-    return false;
-  }
-  game.gamesPerPlayer = result.gamesPerPlayer;
-  game.rounds = result.rounds;
-  game.matches = result.matches;
-  game.team1Score = 0;
-  game.team2Score = 0;
-  el('gamesPerPlayerPill').textContent='4';
-  el('roundsPill').textContent='5';
-  el('calculatedRoundsTeam').value='5';
-  return true;
+const result = buildFairScheduleFixed(game.team1.players, game.team2.players);
+if(!result || result.rounds!==5){
+setError('teamError','Format is fixed at 10 players, 2 courts, 4 games each over 5 rounds.');
+return false;
+}
+game.gamesPerPlayer = result.gamesPerPlayer;
+game.rounds = result.rounds;
+game.matches = result.matches;
+game.team1Score = 0;
+game.team2Score = 0;
+el('gamesPerPlayerPill').textContent='4';
+el('roundsPill').textContent='5';
+el('calculatedRoundsTeam').value='5';
+return true;
 }
 
 function scoreGame(game){
-  game.team1Score = game.matches.filter(m=>m.winner==='team1').length;
-  game.team2Score = game.matches.filter(m=>m.winner==='team2').length;
+game.team1Score = game.matches.filter(m=>m.winner==='team1').length;
+game.team2Score = game.matches.filter(m=>m.winner==='team2').length;
 }
 
 function updateFixtureHeader(game){
-  el('gamesPerPlayerPill').textContent=String(game.gamesPerPlayer??4);
-  el('roundsPill').textContent=String(game.rounds||5);
-  el('team1Score').textContent=String(game.team1Score||0);
-  el('team2Score').textContent=String(game.team2Score||0);
-  const t1=game.team1Name||'Team 1', t2=game.team2Name||'Team 2';
-  el('team1SummaryName').textContent=t1;
-  el('team2SummaryName').textContent=t2;
-  el('team1Label').textContent=t1+' wins';
-  el('team2Label').textContent=t2+' wins';
-  if((game.matches||[]).length && game.matches.every(m=>m.winner)){
-    const result = game.team1Score===game.team2Score
-      ? 'Session result · TBD'
-      : `Session result · ${game.team1Score>game.team2Score?t1:t2} take the session.`;
-    el('finalResult').classList.remove('hidden'); el('finalResult').textContent=result;
-  } else el('finalResult').classList.add('hidden');
-  el('winnerText').textContent = game.team1Score===game.team2Score
-    ? 'Overall winner · TBD'
-    : 'Overall winner · '+(game.team1Score>game.team2Score?t1:t2);
+el('gamesPerPlayerPill').textContent=String(game.gamesPerPlayer??4);
+el('roundsPill').textContent=String(game.rounds||5);
+el('team1Score').textContent=String(game.team1Score||0);
+el('team2Score').textContent=String(game.team2Score||0);
+const t1=game.team1Name||'Team 1', t2=game.team2Name||'Team 2';
+el('team1SummaryName').textContent=t1;
+el('team2SummaryName').textContent=t2;
+el('team1Label').textContent=t1+' wins';
+el('team2Label').textContent=t2+' wins';
+if((game.matches||[]).length && game.matches.every(m=>m.winner)){
+const result = game.team1Score===game.team2Score
+? 'Session result · TBD'
+: `Session result · ${game.team1Score>game.team2Score?t1:t2} take the session.`;
+el('finalResult').classList.remove('hidden'); el('finalResult').textContent=result;
+} else el('finalResult').classList.add('hidden');
+el('winnerText').textContent = game.team1Score===game.team2Score
+? 'Overall winner · TBD'
+: 'Overall winner · '+(game.team1Score>game.team2Score?t1:t2);
 }
 
 function renderMatches(game){
-  const list=el('matchList'); list.innerHTML='';
-  const t1=game.team1Name||'Team 1', t2=game.team2Name||'Team 2';
-  (game.matches||[]).forEach((m,idx)=>{
-    const card=document.createElement('div'); card.className='match-card';
-    const disabled = !(state.mode==='admin' || state.master);
-    const isT1 = m.winner==='team1', isT2 = m.winner==='team2';
-    card.innerHTML=`
-      <div class="match-head">
-        <div>
-          <div class="match-title">Round ${m.round}</div>
-          <div class="match-meta">Court ${m.court} · Match #${idx+1}</div>
-        </div>
-        <div class="mini-badge">${m.winner?('Match winner · '+(isT1?t1:t2)):'Match winner · TBD'}</div>
-      </div>
-      <div class="teams">
-        <div class="team-line"><div><strong>${t1}</strong>${m.team1.join(', ')}</div></div>
-        <div class="team-line"><div><strong>${t2}</strong>${m.team2.join(', ')}</div></div>
-      </div>
-      <div class="winner-actions">
-        <button class="winner-btn ${isT1?'primary':''} ${disabled?'disabled':''}" data-match="${idx}" data-team="team1" ${disabled?'disabled':''}>Mark ${t1} win</button>
-        <button class="winner-btn ${isT2?'primary':''} ${disabled?'disabled':''}" data-match="${idx}" data-team="team2" ${disabled?'disabled':''}>Mark ${t2} win</button>
-      </div>`;
-    list.appendChild(card);
-  });
-  list.querySelectorAll('.winner-btn').forEach(btn=>btn.addEventListener('click',()=>setWinner(Number(btn.dataset.match),btn.dataset.team)));
+const list=el('matchList'); list.innerHTML='';
+const t1=game.team1Name||'Team 1', t2=game.team2Name||'Team 2';
+(game.matches||[]).forEach((m,idx)=>{
+const card=document.createElement('div'); card.className='match-card';
+const disabled = !(state.mode==='admin' || state.master);
+const isT1 = m.winner==='team1', isT2 = m.winner==='team2';
+card.innerHTML=`
+     <div class="match-head">
+       <div>
+         <div class="match-title">Round ${m.round}</div>
+         <div class="match-meta">Court ${m.court} · Match #${idx+1}</div>
+       </div>
+       <div class="mini-badge">${m.winner?('Match winner · '+(isT1?t1:t2)):'Match winner · TBD'}</div>
+     </div>
+     <div class="teams">
+       <div class="team-line"><div><strong>${t1}</strong>${m.team1.join(', ')}</div></div>
+       <div class="team-line"><div><strong>${t2}</strong>${m.team2.join(', ')}</div></div>
+     </div>
+     <div class="winner-actions">
+       <button class="winner-btn ${isT1?'primary':''} ${disabled?'disabled':''}" data-match="${idx}" data-team="team1" ${disabled?'disabled':''}>Mark ${t1} win</button>
+       <button class="winner-btn ${isT2?'primary':''} ${disabled?'disabled':''}" data-match="${idx}" data-team="team2" ${disabled?'disabled':''}>Mark ${t2} win</button>
+     </div>`;
+list.appendChild(card);
+});
+list.querySelectorAll('.winner-btn').forEach(btn=>btn.addEventListener('click',()=>setWinner(Number(btn.dataset.match),btn.dataset.team)));
 }
 
 function showFixtures(game){
-  updateFixtureHeader(game); renderMatches(game); setScreen('fixtures');
-  const adminLike = state.mode==='admin' || state.master;
-  setError('fixturesError', adminLike ? '' : 'You’re in viewer mode · scores are read-only.');
+updateFixtureHeader(game); renderMatches(game); setScreen('fixtures');
+const adminLike = state.mode==='admin' || state.master;
+setError('fixturesError', adminLike ? '' : 'You’re in viewer mode · scores are read-only.');
 }
 function setWinner(idx,team){
-  if(!(state.mode==='admin' || state.master)){
-    setError('fixturesError','Only the host or admin can mark winners.');
-    return;
-  }
-  const game=currentGame(); if(!game) return;
-  const match=game.matches[idx]; if(!match) return;
-  match.winner=team; scoreGame(game); updateFixtureHeader(game); renderMatches(game);
+if(!(state.mode==='admin' || state.master)){
+setError('fixturesError','Only the host or admin can mark winners.');
+return;
+}
+const game=currentGame(); if(!game) return;
+const match=game.matches[idx]; if(!match) return;
+match.winner=team; scoreGame(game); updateFixtureHeader(game); renderMatches(game);
 }
 
 function refreshJoinSelect(){
-  const sel=el('joinGameSelect'); sel.innerHTML='';
-  state.games.forEach(g=>{const opt=document.createElement('option');opt.value=g.id;opt.textContent=g.name;sel.appendChild(opt);});
-  if(!state.games.length){
-    const opt=document.createElement('option');
-    opt.textContent='No sessions yet';
-    opt.value=''; sel.appendChild(opt); sel.disabled=true;
-  } else sel.disabled=false;
+const sel=el('joinGameSelect'); sel.innerHTML='';
+state.games.forEach(g=>{const opt=document.createElement('option');opt.value=g.id;opt.textContent=g.name;sel.appendChild(opt);});
+if(!state.games.length){
+const opt=document.createElement('option');
+opt.textContent='No sessions yet';
+opt.value=''; sel.appendChild(opt); sel.disabled=true;
+} else sel.disabled=false;
 }
 
 /* Admin list */
-function renderMasterList() {
-  const list = el('masterGameList');
-  list.innerHTML = '';
-  if (!state.games.length) {
-    const empty = document.createElement('div');
-    empty.className = 'card';
-    empty.textContent = 'No sessions stored on this device.';
-    list.appendChild(empty);
-    return;
-  }
-  state.games.forEach(g => {
-    // build card with open/delete using g.id etc
-  });
-  // click handlers...
+function renderMasterList(){
+const list=el('masterGameList');
+list.innerHTML='';
+if(!state.games.length){
+const empty=document.createElement('div');
+empty.className='card';
+empty.textContent='No sessions stored on this device.';
+list.appendChild(empty);
+return;
+}
+state.games.forEach(g=>{
+const card=document.createElement('div');
+card.className='match-card';
+card.innerHTML=`
+     <div class="match-head">
+       <div>
+         <div class="match-title">${g.name}</div>
+         <div class="match-meta">Games per player · ${g.gamesPerPlayer ?? 4} · Rounds · ${g.rounds ?? 5}</div>
+       </div>
+       <div class="mini-badge">${g.matches && g.matches.length ? (g.matches.length+' matches') : 'No fixtures yet'}</div>
+     </div>
+     <div class="winner-actions">
+       <button class="winner-btn" data-action="open" data-id="${g.id}">Open as host</button>
+       <button class="winner-btn" data-action="delete" data-id="${g.id}">Delete session</button>
+     </div>`;
+list.appendChild(card);
+});
+list.querySelectorAll('.winner-btn').forEach(btn=>{
+btn.addEventListener('click',()=>{
+const id=btn.dataset.id;
+const action=btn.dataset.action;
+if(action==='delete'){
+state.games = state.games.filter(g=>g.id!==id);
+if(state.currentGameId===id) state.currentGameId=null;
+renderMasterList();
+refreshJoinSelect();
+renderTop();
+}else if(action==='open'){
+state.currentGameId=id;
+state.mode='admin';
+setError('masterError','');
+const game=currentGame();
+if(game && game.matches && game.matches.length){
+showFixtures(game);
+} else {
+setScreen('team');
+}
+}
+});
+});
 }
 
 /* Init UI */
@@ -869,206 +906,191 @@ el('goMaster').onclick=()=>{state.master=false;state.mode='admin';setScreen('mas
 
 /* Create */
 el('createContinue').onclick = async () => {
-  const name = el('createName').value.trim();
-  const pass = el('createPassword').value.trim();
+const name = el('createName').value.trim();
+const pass = el('createPassword').value.trim();
 
-  if (!name || !pass) {
-    return setError('createError','Add a session name and admin passcode to continue.');
-  }
+if (!name || !pass) {
+return setError('createError','Add a session name and admin passcode to continue.');
+}
 
-  setError('createError','');
-  el('createContinue').disabled = true;
+setError('createError','');
+el('createContinue').disabled = true;
 
-  try {
-    const res = await fetch(API_BASE + "/sessions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name,
-        admin_passcode: pass
-      })
-    });
+try {
+const res = await fetch(API_BASE + "/sessions", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+name: name,
+admin_passcode: pass
+})
+});
 
-    if (!res.ok) {
-      el('createContinue').disabled = false;
-      return setError('createError','Could not create session. Backend status ' + res.status + '.');
-    }
+if (!res.ok) {
+el('createContinue').disabled = false;
+return setError('createError','Could not create session. Backend status ' + res.status + '.');
+}
 
-    const session = await res.json(); // { id, name }
+const session = await res.json(); // { id, name }
 
-    const game = {
-      id: session.id,
-      name: session.name,
-      password: pass,
-      team1Name:'Baseline Crew',
-      team2Name:'Kitchen Kings',
-      players:[],
-      team1:{players:[]},
-      team2:{players:[]},
-      gamesPerPlayer:4,
-      rounds:5,
-      matches:[],
-      team1Score:0,
-      team2Score:0
-    };
+const game = {
+id: session.id,
+name: session.name,
+password: pass,
+team1Name:'Baseline Crew',
+team2Name:'Kitchen Kings',
+players:[],
+team1:{players:[]},
+team2:{players:[]},
+gamesPerPlayer:4,
+rounds:5,
+matches:[],
+team1Score:0,
+team2Score:0
+};
 
-    state.games.push(game);
-    state.currentGameId = game.id;
-    state.mode = 'admin';
-    state.master = false;
-    refreshJoinSelect();
-    setScreen('team');
-  } catch (e) {
-    console.error("Network error creating session:", e);
-    setError('createError','Network error creating session. Check backend.');
-  } finally {
-    el('createContinue').disabled = false;
-  }
+state.games.push(game);
+state.currentGameId = game.id;
+state.mode = 'admin';
+state.master = false;
+refreshJoinSelect();
+setScreen('team');
+} catch (e) {
+console.error("Network error creating session:", e);
+setError('createError','Network error creating session. Check backend.');
+} finally {
+el('createContinue').disabled = false;
+}
 };
 
 /* Join */
 async function refreshJoinSelect(){
-  const sel = el('joinGameSelect');
-  sel.innerHTML = '';
-  sel.disabled = true;
+const sel = el('joinGameSelect');
+sel.innerHTML = '';
+sel.disabled = true;
 
-  try {
-    const res = await fetch(API_BASE + "/sessions");
-    if (!res.ok) {
-      const opt = document.createElement('option');
-      opt.value = '';
-      opt.textContent = 'Error loading sessions (' + res.status + ')';
-      sel.appendChild(opt);
-      return;
-    }
-
-    const sessions = await res.json();
-
-    if (!sessions.length) {
-      const opt = document.createElement('option');
-      opt.value = '';
-      opt.textContent = 'No sessions yet';
-      sel.appendChild(opt);
-      return;
-    }
-
-    sessions.forEach(s => {
-      const opt = document.createElement('option');
-      opt.value = s.id;
-      opt.textContent = s.name;
-      sel.appendChild(opt);
-    });
-
-    sel.disabled = false;
-  } catch (e) {
-    console.error("Network error loading sessions:", e);
-    const opt = document.createElement('option');
-    opt.value = '';
-    opt.textContent = 'Could not reach backend';
-    sel.appendChild(opt);
-  }
+try {
+const res = await fetch(API_BASE + "/sessions");
+if (!res.ok) {
+const opt = document.createElement('option');
+opt.value = '';
+opt.textContent = 'Error loading sessions (' + res.status + ')';
+sel.appendChild(opt);
+return;
 }
-  // Fetch all sessions from the backend for Admin view
-async function fetchServerSessions() {
-  try {
-    const res = await fetch('/sessions');
-    if (!res.ok) {
-      throw new Error('Failed to load backend sessions');
-    }
-    const data = await res.json(); // assume [{id,name,...}]
-    return data.sessions || data;  // adjust if your shape is {sessions:[...]}
-  } catch (e) {
-    console.error(e);
-    setError('masterError', 'Could not load sessions from server.');
-    return [];
-  }
+
+const sessions = await res.json();
+
+if (!sessions.length) {
+const opt = document.createElement('option');
+opt.value = '';
+opt.textContent = 'No sessions yet';
+sel.appendChild(opt);
+return;
 }
-  
+
+sessions.forEach(s => {
+const opt = document.createElement('option');
+opt.value = s.id;
+opt.textContent = s.name;
+sel.appendChild(opt);
+});
+
+sel.disabled = false;
+} catch (e) {
+console.error("Network error loading sessions:", e);
+const opt = document.createElement('option');
+opt.value = '';
+opt.textContent = 'Could not reach backend';
+sel.appendChild(opt);
+}
+}
 /* Admin */
-el('masterLogin').onclick = () => {
-  const pass = el('masterPassword').value.trim;
-  if (pass !== MASTERPASS) {
-    setError('masterError', 'Incorrect admin passcode.');
-    return;
-  }
-  state.master = true;
-  state.mode = 'admin';
-  setError('masterError', '');
-  el('masterLoginSection').classList.add('hidden');
-  el('masterContent').classList.remove('hidden');
-  renderMasterList();  // now loads from backend
-  renderTop();
+el('masterBack').onclick=()=>{state.master=false;setScreen('home');};
+el('masterLogin').onclick=()=>{
+const pass=el('masterPassword').value.trim();
+if(pass!==MASTER_PASS){
+setError('masterError','Incorrect admin passcode.');
+return;
+}
+state.master=true;
+state.mode='admin';
+setError('masterError','');
+el('masterLoginSection').classList.add('hidden');
+el('masterContent').classList.remove('hidden');
+renderMasterList();
+renderTop();
 };
 
 /* Team screen */
 el('teamBack').onclick=()=>setScreen('create');
 
 el('modeRandom').onclick=()=>{
-  state.assignmentMode='random';
-  el('modeRandom').classList.add('active'); el('modeManual').classList.remove('active');
-  el('randomInputsWrap').classList.remove('hidden'); el('manualInputsWrap').classList.add('hidden');
-  el('teamsCardsWrap').classList.add('hidden'); setError('teamError','');
+state.assignmentMode='random';
+el('modeRandom').classList.add('active'); el('modeManual').classList.remove('active');
+el('randomInputsWrap').classList.remove('hidden'); el('manualInputsWrap').classList.add('hidden');
+el('teamsCardsWrap').classList.add('hidden'); setError('teamError','');
 };
 el('modeManual').onclick=()=>{
-  state.assignmentMode='manual';
-  el('modeManual').classList.add('active'); el('modeRandom').classList.remove('active');
-  el('randomInputsWrap').classList.add('hidden'); el('manualInputsWrap').classList.remove('hidden');
-  el('teamsCardsWrap').classList.remove('hidden');
-  const team1=manualTeam1Inputs.map(i=>i.value.trim()).slice(0,5);
-  const team2=manualTeam2Inputs.map(i=>i.value.trim()).slice(0,5);
-  updateTeamPreview(team1,team2); setError('teamError','');
+state.assignmentMode='manual';
+el('modeManual').classList.add('active'); el('modeRandom').classList.remove('active');
+el('randomInputsWrap').classList.add('hidden'); el('manualInputsWrap').classList.remove('hidden');
+el('teamsCardsWrap').classList.remove('hidden');
+const team1=manualTeam1Inputs.map(i=>i.value.trim()).slice(0,5);
+const team2=manualTeam2Inputs.map(i=>i.value.trim()).slice(0,5);
+updateTeamPreview(team1,team2); setError('teamError','');
 };
 
 /* Keep games per player fixed at 4 / 5 rounds visually */
 el('gamesPerPlayer').addEventListener('input',()=>{
-  el('gamesPerPlayer').value='4';
-  el('calculatedRoundsTeam').value='5';
+el('gamesPerPlayer').value='4';
+el('calculatedRoundsTeam').value='5';
 });
 
 el('randomAssign').onclick=()=>{
-  const game=currentGame(); if(!game) return;
-  if(state.assignmentMode!=='random') return setError('teamError','Shuffle works only when “Shuffle teams” is selected.');
-  assignRandomToTeams(game);
+const game=currentGame(); if(!game) return;
+if(state.assignmentMode!=='random') return setError('teamError','Shuffle works only when “Shuffle teams” is selected.');
+assignRandomToTeams(game);
 };
 
 el('continueFixtures').onclick=()=>{
-  const game=currentGame(); if(!game) return;
-  if(!(state.mode==='admin' || state.master))
-    return setError('teamError','Only the host or admin can edit teams.');
+const game=currentGame(); if(!game) return;
+if(!(state.mode==='admin' || state.master))
+return setError('teamError','Only the host or admin can edit teams.');
 
-  game.team1Name=el('team1Name').value.trim()||'Team 1';
-  game.team2Name=el('team2Name').value.trim()||'Team 2';
-  el('team1CardTitle').textContent=game.team1Name+' lineup';
-  el('team2CardTitle').textContent=game.team2Name+' lineup';
+game.team1Name=el('team1Name').value.trim()||'Team 1';
+game.team2Name=el('team2Name').value.trim()||'Team 2';
+el('team1CardTitle').textContent=game.team1Name+' lineup';
+el('team2CardTitle').textContent=game.team2Name+' lineup';
 
-  let ok = state.assignmentMode==='random' ? assignRandomToTeams(game) : assignManualToTeams(game);
-  if(!ok) return;
+let ok = state.assignmentMode==='random' ? assignRandomToTeams(game) : assignManualToTeams(game);
+if(!ok) return;
 
-  ok = saveTeamsAndFixtures(game);
-  if(!ok) return;
+ok = saveTeamsAndFixtures(game);
+if(!ok) return;
 
-  scoreGame(game); setError('teamError',''); showFixtures(game);
+scoreGame(game); setError('teamError',''); showFixtures(game);
 };
 
 /* Fixtures controls */
 el('backToTeamSetup').onclick=()=>{
-  if(!(state.mode==='admin' || state.master))
-    return setError('fixturesError','Only the host or admin can edit teams.');
-  setError('fixturesError',''); setScreen('team');
+if(!(state.mode==='admin' || state.master))
+return setError('fixturesError','Only the host or admin can edit teams.');
+setError('fixturesError',''); setScreen('team');
 };
 el('resetScores').onclick=()=>{
-  const game=currentGame(); if(!game) return;
-  if(!(state.mode==='admin' || state.master))
-    return setError('fixturesError','Only the host or admin can reset match results.');
-  game.matches.forEach(m=>m.winner=null); game.team1Score=0; game.team2Score=0;
-  updateFixtureHeader(game); renderMatches(game); setError('fixturesError','All match results have been cleared.');
+const game=currentGame(); if(!game) return;
+if(!(state.mode==='admin' || state.master))
+return setError('fixturesError','Only the host or admin can reset match results.');
+game.matches.forEach(m=>m.winner=null); game.team1Score=0; game.team2Score=0;
+updateFixtureHeader(game); renderMatches(game); setError('fixturesError','All match results have been cleared.');
 };
 
 /* Live team name updates */
 ['team1Name','team2Name'].forEach(id=>el(id).addEventListener('input',()=>{
-  const game=currentGame(); if(!game) return;
-  if(id==='team1Name') game.team1Name=el(id).value.trim();
-  else game.team2Name=el(id).value.trim();
+const game=currentGame(); if(!game) return;
+if(id==='team1Name') game.team1Name=el(id).value.trim();
+else game.team2Name=el(id).value.trim();
 }));
 
 setScreen('home');
