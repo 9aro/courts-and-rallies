@@ -30,9 +30,12 @@ class SessionCreate(BaseModel):
 class Session(BaseModel):
     id: str
     name: str
-    admin_passcode: str  # store passcode for host login later
+    admin_passcode: str  # stored so host can log back in
 
 SESSIONS: List[Session] = []
+
+class HostLoginBody(BaseModel):
+    admin_passcode: str
 
 # ---------- Routes ----------
 
@@ -44,7 +47,7 @@ def health():
 def create_session(body: SessionCreate):
     """
     Create a new session with a name and admin passcode.
-    Returns the session ID and name so the frontend can use it.
+    Returns the session so the frontend can use id and name.
     """
     session_id = str(uuid.uuid4())
     session = Session(
@@ -67,17 +70,35 @@ def delete_session(session_id: str):
     """
     Delete a session by ID.
 
-    Called by the frontend as:
+    Frontend calls:
     DELETE /sessions/<session_id>
     """
     global SESSIONS
 
     for i, s in enumerate(SESSIONS):
         if s.id == session_id:
-            # remove the session from the in-memory list
             del SESSIONS[i]
-            # 204 No Content — nothing else to send
             return Response(status_code=204)
 
-    # If we get here, no session matched that ID
+    raise HTTPException(status_code=404, detail="Session not found")
+
+@app.post("/sessions/{session_id}/host-login", response_model=Session)
+def host_login(session_id: str, body: HostLoginBody):
+    """
+    Verify the admin passcode for a session.
+
+    Frontend calls:
+    POST /sessions/<session_id>/host-login
+    body: { "admin_passcode": "..." }
+
+    If passcode matches, return the session so the frontend
+    can switch into host/admin mode for that game.
+    """
+    for s in SESSIONS:
+        if s.id == session_id:
+            if s.admin_passcode == body.admin_passcode:
+                return s
+            # wrong passcode
+            raise HTTPException(status_code=401, detail="Wrong admin passcode")
+
     raise HTTPException(status_code=404, detail="Session not found")
