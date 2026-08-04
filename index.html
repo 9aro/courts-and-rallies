@@ -580,19 +580,18 @@ const manualTeam1Inputs = [];
 const manualTeam2Inputs = [];
 const t1Slots = [];
 const t2Slots = [];
-
-// lightweight session cache for names when joining/admin
 let serverSessionsCache = [];
 
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
 function currentGame(){
-  // local game object if we have it, otherwise build a thin placeholder from backend cache
-  const local = state.games.find(g=>g.id===state.currentGameId);
+  const local = state.games.find(g=>String(g.id)===String(state.currentGameId));
   if (local) return local;
-  const fromServer = serverSessionsCache.find(s=>String(s.id)===String(state.currentGameId));
-  if (fromServer) {
+  const s = serverSessionsCache.find(x=>String(x.id)===String(state.currentGameId));
+  if (s) {
     return {
-      id: fromServer.id,
-      name: fromServer.name,
+      id: s.id,
+      name: s.name,
       team1Name: 'Team 1',
       team2Name: 'Team 2',
       gamesPerPlayer: 4,
@@ -631,7 +630,7 @@ function renderTop(){
   el('resetScores').classList.toggle('hidden',!adminLike);
 }
 
-/* Simple back/home buttons */
+/* Back / home buttons */
 el('createBack').onclick = () => { setScreen('home'); };
 el('joinBack').onclick = () => { setScreen('home'); };
 el('masterBack').onclick = () => { state.master=false; setScreen('home'); };
@@ -659,7 +658,6 @@ el('joinContinue').onclick = () => {
   state.mode = 'viewer';
   state.master = false;
 
-  // Top badge now uses session name from cache
   renderTop();
   setScreen('fixtures');
 };
@@ -710,7 +708,7 @@ function updateTeamPreview(team1List,team2List){
   el('teamsCardsWrap').classList.remove('hidden');
 }
 
-/* Team assignment + fairness engine (same as before) */
+/* Team assignment + fairness engine */
 function assignRandomToTeams(game){
   const names=randomInputs.map(i=>i.value.trim()).filter(Boolean);
   if(names.length!==10){setError('teamError','This format needs exactly 10 players.');return false;}
@@ -730,8 +728,6 @@ function assignManualToTeams(game){
   setError('teamError','Manual teams locked in. Nice.');
   return true;
 }
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-
 function buildTeamSitSchedule(teamPlayers, rounds, gamesPerPlayer){
   const restNeeded = rounds - gamesPerPlayer;
   const totalSitSlots = teamPlayers.length * restNeeded;
@@ -920,7 +916,7 @@ async function fetchServerSessions() {
   }
 }
 
-/* Admin list with delete */
+/* Admin list with delete wired */
 async function renderMasterList(){
   const list=el('masterGameList');
   list.innerHTML='';
@@ -956,16 +952,18 @@ async function renderMasterList(){
     btn.addEventListener('click', async ()=>{
       const id=btn.dataset.id;
       const action=btn.dataset.action;
+      console.log('Admin button clicked', action, id);
+
       if(action==='delete'){
         try {
           const res = await fetch(API_BASE + "/sessions/" + id, { method: "DELETE" });
           if (!res.ok) {
-            return setError('masterError','Delete failed. Backend status ' + res.status + '.');
+            return setError('masterError','Delete failed (' + res.status + ').');
           }
           setError('masterError','Session deleted.');
         } catch (e) {
-          console.error("Delete session error:", e);
-          return setError('masterError','Could not delete session (network error).');
+          console.error('Delete error:', e);
+          return setError('masterError','Network error deleting session.');
         }
         await renderMasterList();
         await refreshJoinSelect();
