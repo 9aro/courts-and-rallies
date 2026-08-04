@@ -560,13 +560,15 @@ input:focus,select:focus{
 </div>
 
 <script>
-const state={
-  mode:'admin',          // 'admin' | 'viewer'
-  master:false,          // admin-all-sessions flag
-  screen:'home',
-  games:[],
-  currentGameId:null,
-  assignmentMode:'random'
+const API_BASE = "https://courts-and-rallies.onrender.com";
+
+const state = {
+  mode: 'admin',
+  master: false,
+  screen: 'home',
+  games: [],
+  currentGameId: null,
+  assignmentMode: 'random'
 };
 const MASTER_PASS = 'pickleball';
 
@@ -870,46 +872,106 @@ el('goJoin').onclick=()=>{state.mode='viewer';state.master=false;refreshJoinSele
 el('goMaster').onclick=()=>{state.master=false;state.mode='admin';setScreen('master');renderTop();};
 
 /* Create */
-el('createBack').onclick=()=>setScreen('home');
-el('createContinue').onclick=()=>{
-  const name=el('createName').value.trim(), pass=el('createPassword').value.trim();
-  if(!name||!pass) return setError('createError','Add a session name and admin passcode to continue.');
-  const game={
-    id:uid(),
-    name,
-    password:pass,
-    team1Name:'Baseline Crew',
-    team2Name:'Kitchen Kings',
-    players:[],
-    team1:{players:[]},
-    team2:{players:[]},
-    gamesPerPlayer:4,
-    rounds:5,
-    matches:[],
-    team1Score:0,
-    team2Score:0
-  };
-  state.games.push(game);
-  state.currentGameId=game.id;
-  state.mode='admin';
-  state.master=false;
-  refreshJoinSelect();
+el('createContinue').onclick = async () => {
+  const name = el('createName').value.trim();
+  const pass = el('createPassword').value.trim();
+
+  if (!name || !pass) {
+    return setError('createError','Add a session name and admin passcode to continue.');
+  }
+
   setError('createError','');
-  setScreen('team');
+  el('createContinue').disabled = true;
+
+  try {
+    const res = await fetch(API_BASE + "/sessions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        admin_passcode: pass
+      })
+    });
+
+    if (!res.ok) {
+      el('createContinue').disabled = false;
+      return setError('createError','Could not create session. Backend status ' + res.status + '.');
+    }
+
+    const session = await res.json(); // { id, name }
+
+    const game = {
+      id: session.id,
+      name: session.name,
+      password: pass,
+      team1Name:'Baseline Crew',
+      team2Name:'Kitchen Kings',
+      players:[],
+      team1:{players:[]},
+      team2:{players:[]},
+      gamesPerPlayer:4,
+      rounds:5,
+      matches:[],
+      team1Score:0,
+      team2Score:0
+    };
+
+    state.games.push(game);
+    state.currentGameId = game.id;
+    state.mode = 'admin';
+    state.master = false;
+    refreshJoinSelect();
+    setScreen('team');
+  } catch (e) {
+    console.error("Network error creating session:", e);
+    setError('createError','Network error creating session. Check backend.');
+  } finally {
+    el('createContinue').disabled = false;
+  }
 };
 
 /* Join */
-el('joinBack').onclick=()=>setScreen('home');
-el('joinContinue').onclick=()=>{
-  const game=state.games.find(g=>g.id===el('joinGameSelect').value);
-  const name=el('joinName').value.trim();
-  if(!game||!name) return setError('joinError','Pick a session and enter your name to join.');
-  state.currentGameId=game.id;
-  state.mode='viewer';
-  state.master=false;
-  setError('joinError','');
-  showFixtures(game);
-};
+async function refreshJoinSelect(){
+  const sel = el('joinGameSelect');
+  sel.innerHTML = '';
+  sel.disabled = true;
+
+  try {
+    const res = await fetch(API_BASE + "/sessions");
+    if (!res.ok) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = 'Error loading sessions (' + res.status + ')';
+      sel.appendChild(opt);
+      return;
+    }
+
+    const sessions = await res.json();
+
+    if (!sessions.length) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = 'No sessions yet';
+      sel.appendChild(opt);
+      return;
+    }
+
+    sessions.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = s.name;
+      sel.appendChild(opt);
+    });
+
+    sel.disabled = false;
+  } catch (e) {
+    console.error("Network error loading sessions:", e);
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = 'Could not reach backend';
+    sel.appendChild(opt);
+  }
+}
 
 /* Admin */
 el('masterBack').onclick=()=>{state.master=false;setScreen('home');};
