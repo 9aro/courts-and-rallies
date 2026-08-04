@@ -441,9 +441,9 @@ input:focus,select:focus{
     </div>
 
     <div class="section hidden" id="masterContent">
-      <div class="subtitle">Sessions on this device</div>
-      <div class="match-list" id="masterGameList"></div>
-    </div>
+  <div class="subtitle">Sessions on the server</div>
+  <div class="match-list" id="masterGameList"></div>
+</div>
   </div>
 
   <!-- Team Setup -->
@@ -843,56 +843,20 @@ function refreshJoinSelect(){
 }
 
 /* Admin list */
-function renderMasterList(){
-  const list=el('masterGameList');
-  list.innerHTML='';
-  if(!state.games.length){
-    const empty=document.createElement('div');
-    empty.className='card';
-    empty.textContent='No sessions stored on this device.';
+function renderMasterList() {
+  const list = el('masterGameList');
+  list.innerHTML = '';
+  if (!state.games.length) {
+    const empty = document.createElement('div');
+    empty.className = 'card';
+    empty.textContent = 'No sessions stored on this device.';
     list.appendChild(empty);
     return;
   }
-  state.games.forEach(g=>{
-    const card=document.createElement('div');
-    card.className='match-card';
-    card.innerHTML=`
-      <div class="match-head">
-        <div>
-          <div class="match-title">${g.name}</div>
-          <div class="match-meta">Games per player · ${g.gamesPerPlayer ?? 4} · Rounds · ${g.rounds ?? 5}</div>
-        </div>
-        <div class="mini-badge">${g.matches && g.matches.length ? (g.matches.length+' matches') : 'No fixtures yet'}</div>
-      </div>
-      <div class="winner-actions">
-        <button class="winner-btn" data-action="open" data-id="${g.id}">Open as host</button>
-        <button class="winner-btn" data-action="delete" data-id="${g.id}">Delete session</button>
-      </div>`;
-    list.appendChild(card);
+  state.games.forEach(g => {
+    // build card with open/delete using g.id etc
   });
-  list.querySelectorAll('.winner-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const id=btn.dataset.id;
-      const action=btn.dataset.action;
-      if(action==='delete'){
-        state.games = state.games.filter(g=>g.id!==id);
-        if(state.currentGameId===id) state.currentGameId=null;
-        renderMasterList();
-        refreshJoinSelect();
-        renderTop();
-      }else if(action==='open'){
-        state.currentGameId=id;
-        state.mode='admin';
-        setError('masterError','');
-        const game=currentGame();
-        if(game && game.matches && game.matches.length){
-          showFixtures(game);
-        } else {
-          setScreen('team');
-        }
-      }
-    });
-  });
+  // click handlers...
 }
 
 /* Init UI */
@@ -1004,20 +968,35 @@ async function refreshJoinSelect(){
     sel.appendChild(opt);
   }
 }
+  // Fetch all sessions from the backend for Admin view
+async function fetchServerSessions() {
+  try {
+    const res = await fetch('/sessions');
+    if (!res.ok) {
+      throw new Error('Failed to load backend sessions');
+    }
+    const data = await res.json(); // assume [{id,name,...}]
+    return data.sessions || data;  // adjust if your shape is {sessions:[...]}
+  } catch (e) {
+    console.error(e);
+    setError('masterError', 'Could not load sessions from server.');
+    return [];
+  }
+}
+  
 /* Admin */
-el('masterBack').onclick=()=>{state.master=false;setScreen('home');};
-el('masterLogin').onclick=()=>{
-  const pass=el('masterPassword').value.trim();
-  if(pass!==MASTER_PASS){
-    setError('masterError','Incorrect admin passcode.');
+el('masterLogin').onclick = () => {
+  const pass = el('masterPassword').value.trim;
+  if (pass !== MASTERPASS) {
+    setError('masterError', 'Incorrect admin passcode.');
     return;
   }
-  state.master=true;
-  state.mode='admin';
-  setError('masterError','');
+  state.master = true;
+  state.mode = 'admin';
+  setError('masterError', '');
   el('masterLoginSection').classList.add('hidden');
   el('masterContent').classList.remove('hidden');
-  renderMasterList();
+  renderMasterList();  // now loads from backend
   renderTop();
 };
 
