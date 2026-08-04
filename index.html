@@ -607,7 +607,30 @@ function renderTop(){
 el('joinBack').onclick = () => { setScreen('home'); };
 el('masterBack').onclick = () => { setScreen('home'); };
 
-  
+  el('joinContinue').onclick = () => {
+  const sel = el('joinGameSelect');
+  const gameId = sel.value;
+  const name = el('joinName') ? el('joinName').value.trim() : '';
+
+  if (!gameId) {
+    return setError('joinError','Pick a session to join.');
+  }
+  if (!name) {
+    return setError('joinError','Enter your name to join.');
+  }
+
+  setError('joinError','');
+
+  // use the selected backend session id
+  state.currentGameId = gameId;
+
+  // viewer mode for this session
+  state.mode = 'viewer';
+  state.master = false;
+
+  // go to fixtures screen (you can change to 'team' if your flow expects that)
+  setScreen('fixtures');
+};
 /* Inputs */
 function buildRandomInputs(){
   const wrap=el('randomInputs');wrap.innerHTML='';randomInputs.length=0;
