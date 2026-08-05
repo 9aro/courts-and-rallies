@@ -225,6 +225,25 @@ font-size:15px;
 font-weight:600;
 }
 
+.score-card,
+.mvp-card{
+background:
+linear-gradient(180deg, #FF9E45 0%, #FF7A1A 55%, #D9580A 100%);
+border:0;
+box-shadow:
+0 18px 40px rgba(0,0,0,0.9),
+inset 0 1px 0 rgba(255,255,255,0.6);
+text-align:center;
+}
+.score-card .muted,
+.score-card .score,
+.mvp-card h4,
+.mvp-card .muted{
+color:#0B0E13;
+}
+.score-card .muted{opacity:0.75;}
+.mvp-card .muted{opacity:0.85;}
+
 .slot,
 .team-line{
 background:
@@ -561,12 +580,12 @@ font-size:13px;
 </div>
 
 <div class="section summary">
-<div class="card">
+<div class="card score-card">
 <div class="muted" id="team1SummaryName">Team 1</div>
 <div class="score" id="team1Score">0</div>
 <div class="muted" id="team1Label">Team 1 wins</div>
 </div>
-<div class="card">
+<div class="card score-card">
 <div class="muted" id="team2SummaryName">Team 2</div>
 <div class="score" id="team2Score">0</div>
 <div class="muted" id="team2Label">Team 2 wins</div>
@@ -577,7 +596,7 @@ font-size:13px;
 <div class="result hidden" id="finalResult"></div>
 
 <div class="section">
-<div class="card">
+<div class="card mvp-card">
 <h4>MVP</h4>
 <div class="muted" id="mvpContent">Play some matches to see the MVP.</div>
 </div>
