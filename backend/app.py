@@ -1,18 +1,17 @@
+import os
+import uuid
+from typing import List, Optional
+
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional
-import uuid
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import SQLAlchemyError
 
 app = FastAPI()
 
-# ---------- CORS ----------
-
 origins = [
-    # Old Netlify frontend (still allowed)
     "https://courtsandrallies.netlify.app",
-
-    # GitHub Pages frontend
     "https://9aro.github.io",
     "https://9aro.github.io/courts-and-rallies/",
     "https://9aro.github.io/courts-and-rallies",
@@ -26,31 +25,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------- Config ----------
+ADMIN_TOOLS_PASSCODE = "pickleball"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-ADMIN_TOOLS_PASSCODE = "pickleball"  # tools/admin panel passcode
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL is not set")
 
-# ---------- Models ----------
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+
 
 class SessionCreate(BaseModel):
     name: str
     admin_passcode: str
 
+
 class Session(BaseModel):
     id: str
     name: str
-    admin_passcode: str  # stored so host can log back in
+    admin_passcode: str
+
 
 class Match(BaseModel):
     round: int
     court: int
     team1: List[str]
     team2: List[str]
-    winner: Optional[str]  # "team1", "team2", or None
+    winner: Optional[str] = None
+
 
 class TeamState(BaseModel):
     name: str
     players: List[str]
+
 
 class SessionState(BaseModel):
     team1: TeamState
@@ -61,124 +67,145 @@ class SessionState(BaseModel):
     team1_score: int
     team2_score: int
 
+
 class HostLoginBody(BaseModel):
     admin_passcode: str
+
 
 class AdminToolsLoginBody(BaseModel):
     tools_passcode: str
 
-# ---------- In-memory storage ----------
 
-SESSIONS: List[Session] = []
-SESSION_STATES: dict[str, SessionState] = {}
+@app.on_event("startup")
+def startup():
+    with engine.begin() as conn:
+        conn.execute(text("""
+            create table if not exists sessions (
+              id text primary key,
+              name text not null,
+              admin_passcode text not null
+            )
+        """))
+        conn.execute(text("""
+            create table if not exists session_states (
+              session_id text primary key references sessions(id) on delete cascade,
+              state jsonb not null
+            )
+        """))
 
-# ---------- Basic routes ----------
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
+
 @app.post("/sessions", response_model=Session)
 def create_session(body: SessionCreate):
-    """
-    Create a new session with a name and admin passcode.
-    """
     session_id = str(uuid.uuid4())
-    session = Session(
-        id=session_id,
-        name=body.name,
-        admin_passcode=body.admin_passcode
-    )
-    SESSIONS.append(session)
-    # No state yet; frontend will create teams/fixtures and PUT /sessions/{id}/state
-    return session
+    try:
+        with engine.begin() as conn:
+            conn.execute(
+                text("insert into sessions (id, name, admin_passcode) values (:id, :name, :admin_passcode)"),
+                {"id": session_id, "name": body.name, "admin_passcode": body.admin_passcode},
+            )
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Database error creating session: {str(e)}")
+
+    return Session(id=session_id, name=body.name, admin_passcode=body.admin_passcode)
+
 
 @app.get("/sessions", response_model=List[Session])
 def list_sessions():
-    """
-    List all sessions currently in memory.
-    """
-    return SESSIONS
+    try:
+        with engine.begin() as conn:
+            rows = conn.execute(text("select id, name, admin_passcode from sessions order by name asc")).mappings().all()
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Database error listing sessions: {str(e)}")
+
+    return [Session(**row) for row in rows]
+
 
 @app.delete("/sessions/{session_id}", status_code=204)
 def delete_session(session_id: str):
-    """
-    Delete a session by ID, and its stored state if present.
-    """
-    global SESSIONS
-
-    # remove from sessions list
-    for i, s in enumerate(SESSIONS):
-        if s.id == session_id:
-            del SESSIONS[i]
-            break
-    else:
-        # no matching session
-        raise HTTPException(status_code=404, detail="Session not found")
-
-    # also remove any stored state
-    if session_id in SESSION_STATES:
-        del SESSION_STATES[session_id]
+    try:
+        with engine.begin() as conn:
+            result = conn.execute(text("delete from sessions where id = :id"), {"id": session_id})
+            if result.rowcount == 0:
+                raise HTTPException(status_code=404, detail="Session not found")
+    except HTTPException:
+        raise
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Database error deleting session: {str(e)}")
 
     return Response(status_code=204)
 
-# ---------- Host login ----------
 
 @app.post("/sessions/{session_id}/host-login", response_model=Session)
 def host_login(session_id: str, body: HostLoginBody):
-    """
-    Verify the admin passcode for a session.
+    try:
+        with engine.begin() as conn:
+            row = conn.execute(
+                text("select id, name, admin_passcode from sessions where id = :id"),
+                {"id": session_id},
+            ).mappings().first()
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Database error on host login: {str(e)}")
 
-    Frontend calls (Host existing session):
-    POST /sessions/<session_id>/host-login
-    body: { "admin_passcode": "..." }
-    """
-    for s in SESSIONS:
-        if s.id == session_id:
-            if s.admin_passcode == body.admin_passcode:
-                return s
-            raise HTTPException(status_code=401, detail="Wrong admin passcode")
-    raise HTTPException(status_code=404, detail="Session not found")
+    if not row:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if row["admin_passcode"] != body.admin_passcode:
+        raise HTTPException(status_code=401, detail="Wrong admin passcode")
 
-# ---------- Admin tools login ----------
+    return Session(**row)
+
 
 @app.post("/admin/tools-login")
 def admin_tools_login(body: AdminToolsLoginBody):
-    """
-    Check tools/admin passcode for local Admin panel.
-    """
     if body.tools_passcode == ADMIN_TOOLS_PASSCODE:
         return {"ok": True}
     raise HTTPException(status_code=401, detail="Wrong admin tools passcode")
 
-# ---------- Session state (teams, fixtures, scores) ----------
 
 @app.get("/sessions/{session_id}/state", response_model=SessionState)
 def get_session_state(session_id: str):
-    """
-    Get full game state (teams, matches, scores) for a session.
+    try:
+        with engine.begin() as conn:
+            row = conn.execute(
+                text("select state from session_states where session_id = :session_id"),
+                {"session_id": session_id},
+            ).mappings().first()
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Database error loading session state: {str(e)}")
 
-    Used by host on any device to resume the ongoing fixtures.
-    """
-    if session_id not in SESSION_STATES:
+    if not row:
         raise HTTPException(status_code=404, detail="Session state not found")
-    return SESSION_STATES[session_id]
+
+    return row["state"]
+
 
 @app.put("/sessions/{session_id}/state", response_model=SessionState)
 def put_session_state(session_id: str, state: SessionState):
-    """
-    Save or update full game state (teams, matches, scores) for a session.
+    try:
+        with engine.begin() as conn:
+            exists = conn.execute(
+                text("select 1 from sessions where id = :id"),
+                {"id": session_id},
+            ).first()
+            if not exists:
+                raise HTTPException(status_code=404, detail="Session not found")
 
-    Frontend calls this:
-      - After building fixtures (teams & matches).
-      - After marking winners / resetting scores.
+            conn.execute(
+                text("""
+                    insert into session_states (session_id, state)
+                    values (:session_id, cast(:state as jsonb))
+                    on conflict (session_id)
+                    do update set state = excluded.state
+                """),
+                {"session_id": session_id, "state": state.model_dump_json()},
+            )
+    except HTTPException:
+        raise
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Database error saving session state: {str(e)}")
 
-    This makes host rejoin cross-device: any host with the correct
-    admin_passcode can GET this state and continue from where they left off.
-    """
-    # Ensure the session exists
-    if not any(s.id == session_id for s in SESSIONS):
-        raise HTTPException(status_code=404, detail="Session not found")
-
-    SESSION_STATES[session_id] = state
     return state
