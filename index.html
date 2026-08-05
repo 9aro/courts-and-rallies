@@ -767,73 +767,48 @@ function assignManualToTeams(game){
   setError('teamError','Manual teams locked in.');
   return true;
 }
-function buildTeamSitSchedule(teamPlayers, rounds, gamesPerPlayer){
-  // Tracks rest by PLAYER INDEX, not name — this guarantees correctness even if
-  // two players share the same name (e.g. two blank name fields). Every player
-  // is guaranteed to sit out exactly `restNeeded` times total, never more, and
-  // sits are spread as evenly as possible across rounds with no duplicate
-  // player sitting twice in the same round.
-  const restNeeded = rounds - gamesPerPlayer;
-  const n = teamPlayers.length;
-
-  // Build a pool containing each player's index repeated `restNeeded` times,
-  // then shuffle it. Since restNeeded=1 in this app's fixed format, each
-  // player's index appears exactly once in the pool — dealing it out below
-  // guarantees exactly one sit-round per player, period.
-  let pool = [];
-  for (let i = 0; i < n; i++) {
-    for (let k = 0; k < restNeeded; k++) pool.push(i);
-  }
-  pool = shuffle(pool);
-
-  const totalSitSlots = pool.length;
-  const sitsPerRoundBase = Math.floor(totalSitSlots / rounds);
-  const remainder = totalSitSlots % rounds;
-
+// Fixed 1-factorization of K5: for 5 players (indices 0-4), sitting exactly
+// one out per round over 5 rounds, this is the schedule that pairs the
+// remaining 4 into 2 partnerships each round such that, across all 5 rounds,
+// all C(5,2)=10 possible partnerships occur EXACTLY ONCE. That guarantees
+// every player partners with every one of their 4 teammates at least once
+// (in fact exactly once) over the session.
+const PARTNER_COVERING_PATTERN = [
+  { out: 0, pairs: [[1,2],[3,4]] },
+  { out: 1, pairs: [[0,4],[2,3]] },
+  { out: 2, pairs: [[0,3],[1,4]] },
+  { out: 3, pairs: [[0,1],[2,4]] },
+  { out: 4, pairs: [[0,2],[1,3]] }
+];
+function buildTeamPartnerSchedule(teamPlayers){
+  // Randomize which physical player lands on which index, so the sit-out /
+  // pairing order isn't predictable session to session — the underlying
+  // pattern still guarantees full partner coverage regardless of the mapping.
+  const order = shuffle(teamPlayers.slice());
   const sitSchedule = {};
-  for (let r = 1; r <= rounds; r++) sitSchedule[r] = [];
-
-  let poolIndex = 0;
-  for (let r = 1; r <= rounds; r++) {
-    const target = sitsPerRoundBase + (r <= remainder ? 1 : 0);
-    const roundPlayers = new Set();
-
-    while (roundPlayers.size < target && poolIndex < pool.length) {
-      const candidateIdx = pool[poolIndex];
-      if (!roundPlayers.has(candidateIdx)) {
-        roundPlayers.add(candidateIdx);
-        poolIndex++;
-      } else {
-        // Same player already sitting this round (only possible when
-        // restNeeded > 1) — swap forward to the next different player.
-        let swapWith = poolIndex + 1;
-        while (swapWith < pool.length && roundPlayers.has(pool[swapWith])) swapWith++;
-        if (swapWith < pool.length) {
-          [pool[poolIndex], pool[swapWith]] = [pool[swapWith], pool[poolIndex]];
-        } else {
-          break;
-        }
-      }
-    }
-
-    sitSchedule[r] = Array.from(roundPlayers).map(i => teamPlayers[i]);
-  }
-
-  return sitSchedule;
+  const pairSchedule = {};
+  PARTNER_COVERING_PATTERN.forEach((row, idx) => {
+    const r = idx + 1;
+    sitSchedule[r] = [order[row.out]];
+    pairSchedule[r] = row.pairs.map(pair => pair.map(i => order[i]));
+  });
+  return { sitSchedule, pairSchedule };
 }
 function buildFairScheduleFixed(team1, team2){
   const gamesPerPlayer = 4;
   const rounds = 5;
   const courts = 2;
 
-  const sit1 = buildTeamSitSchedule(team1, rounds, gamesPerPlayer);
-  const sit2 = buildTeamSitSchedule(team2, rounds, gamesPerPlayer);
+  if (team1.length !== 5 || team2.length !== 5) {
+    return null;
+  }
+
+  const sched1 = buildTeamPartnerSchedule(team1);
+  const sched2 = buildTeamPartnerSchedule(team2);
   const matches = [];
   for(let r=1;r<=rounds;r++){
-    const active1 = shuffle(team1.filter(p=>!sit1[r].includes(p)));
-    const active2 = shuffle(team2.filter(p=>!sit2[r].includes(p)));
-    const pairs1 = []; for(let i=0;i<active1.length;i+=2) pairs1.push(active1.slice(i,i+2));
-    const pairs2 = []; for(let i=0;i<active2.length;i+=2) pairs2.push(active2.slice(i,i+2));
+    const pairs1 = shuffle(sched1.pairSchedule[r].slice());
+    const pairs2 = shuffle(sched2.pairSchedule[r].slice());
     const courtsThisRound = Math.min(pairs1.length, pairs2.length, courts);
     for(let c=0;c<courtsThisRound;c++){
       matches.push({round:r,court:c+1,team1:pairs1[c],team2:pairs2[c],winner:null});
