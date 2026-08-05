@@ -27,11 +27,7 @@ app.add_middleware(
 
 ADMIN_TOOLS_PASSCODE = "pickleball"
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL is not set")
-
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True) if DATABASE_URL else None
 
 
 class SessionCreate(BaseModel):
@@ -76,8 +72,13 @@ class AdminToolsLoginBody(BaseModel):
     tools_passcode: str
 
 
-@app.on_event("startup")
-def startup():
+def db_ready():
+    return engine is not None
+
+
+def init_db():
+    if not db_ready():
+        return
     with engine.begin() as conn:
         conn.execute(text("""
             create table if not exists sessions (
@@ -94,14 +95,23 @@ def startup():
         """))
 
 
+@app.on_event("startup")
+def startup():
+    init_db()
+
+
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "db_ready": db_ready()}
 
 
 @app.post("/sessions", response_model=Session)
 def create_session(body: SessionCreate):
     session_id = str(uuid.uuid4())
+
+    if not db_ready():
+        raise HTTPException(status_code=500, detail="DATABASE_URL is not set on Render")
+
     try:
         with engine.begin() as conn:
             conn.execute(
@@ -116,9 +126,14 @@ def create_session(body: SessionCreate):
 
 @app.get("/sessions", response_model=List[Session])
 def list_sessions():
+    if not db_ready():
+        return []
+
     try:
         with engine.begin() as conn:
-            rows = conn.execute(text("select id, name, admin_passcode from sessions order by name asc")).mappings().all()
+            rows = conn.execute(
+                text("select id, name, admin_passcode from sessions order by name asc")
+            ).mappings().all()
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Database error listing sessions: {str(e)}")
 
@@ -127,6 +142,9 @@ def list_sessions():
 
 @app.delete("/sessions/{session_id}", status_code=204)
 def delete_session(session_id: str):
+    if not db_ready():
+        raise HTTPException(status_code=500, detail="DATABASE_URL is not set on Render")
+
     try:
         with engine.begin() as conn:
             result = conn.execute(text("delete from sessions where id = :id"), {"id": session_id})
@@ -142,6 +160,9 @@ def delete_session(session_id: str):
 
 @app.post("/sessions/{session_id}/host-login", response_model=Session)
 def host_login(session_id: str, body: HostLoginBody):
+    if not db_ready():
+        raise HTTPException(status_code=500, detail="DATABASE_URL is not set on Render")
+
     try:
         with engine.begin() as conn:
             row = conn.execute(
@@ -168,6 +189,9 @@ def admin_tools_login(body: AdminToolsLoginBody):
 
 @app.get("/sessions/{session_id}/state", response_model=SessionState)
 def get_session_state(session_id: str):
+    if not db_ready():
+        raise HTTPException(status_code=500, detail="DATABASE_URL is not set on Render")
+
     try:
         with engine.begin() as conn:
             row = conn.execute(
@@ -185,6 +209,9 @@ def get_session_state(session_id: str):
 
 @app.put("/sessions/{session_id}/state", response_model=SessionState)
 def put_session_state(session_id: str, state: SessionState):
+    if not db_ready():
+        raise HTTPException(status_code=500, detail="DATABASE_URL is not set on Render")
+
     try:
         with engine.begin() as conn:
             exists = conn.execute(
