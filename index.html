@@ -576,6 +576,13 @@ font-size:13px;
 <div class="result" id="winnerText">Overall winner · TBD</div>
 <div class="result hidden" id="finalResult"></div>
 
+<div class="section">
+<div class="card">
+<h4>MVP</h4>
+<div class="muted" id="mvpContent">Play some matches to see the MVP.</div>
+</div>
+</div>
+
 <div class="match-list" id="matchList"></div>
 <div class="error hidden" id="fixturesError"></div>
 </div>
@@ -898,6 +905,37 @@ async function loadSessionStateFromBackend(sessionId){
   }
 }
 
+/* MVP: player with the most match wins overall */
+function computePlayerWins(game){
+  const allPlayers = [...((game.team1&&game.team1.players)||[]), ...((game.team2&&game.team2.players)||[])];
+  const wins = {};
+  allPlayers.forEach(p=>{ wins[p]=0; });
+  (game.matches||[]).forEach(m=>{
+    if(!m.winner) return;
+    const winningPair = m.winner==='team1' ? m.team1 : m.team2;
+    (winningPair||[]).forEach(p=>{ wins[p]=(wins[p]||0)+1; });
+  });
+  return wins;
+}
+function renderMVP(game){
+  const mvpEl = el('mvpContent');
+  if(!mvpEl) return;
+  const wins = computePlayerWins(game);
+  const entries = Object.entries(wins);
+  if(entries.length===0){
+    mvpEl.textContent='Play some matches to see the MVP.';
+    return;
+  }
+  const maxWins = Math.max(...entries.map(([,w])=>w));
+  if(maxWins===0){
+    mvpEl.textContent='Play some matches to see the MVP.';
+    return;
+  }
+  const mvps = entries.filter(([,w])=>w===maxWins).map(([name])=>name);
+  const label = mvps.length>1 ? 'MVPs (tied)' : 'MVP';
+  mvpEl.innerHTML = `<div class="name" style="font-size:16px;margin-bottom:4px;">${label} · ${mvps.join(', ')}</div><div class="label">${maxWins} win${maxWins===1?'':'s'}</div>`;
+}
+
 /* Fixtures header & render */
 function updateFixtureHeader(game){
   el('gamesPerPlayerPill').textContent=String(game.gamesPerPlayer??4);
@@ -919,6 +957,7 @@ function updateFixtureHeader(game){
   el('winnerText').textContent = game.team1Score===game.team2Score
     ? 'Overall winner · TBD'
     : 'Overall winner · '+(game.team1Score>game.team2Score?t1:t2);
+  renderMVP(game);
 }
 function renderMatches(game){
   const list=el('matchList'); list.innerHTML='';
