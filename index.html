@@ -768,28 +768,57 @@ function assignManualToTeams(game){
   return true;
 }
 function buildTeamSitSchedule(teamPlayers, rounds, gamesPerPlayer){
+  // Tracks rest by PLAYER INDEX, not name — this guarantees correctness even if
+  // two players share the same name (e.g. two blank name fields). Every player
+  // is guaranteed to sit out exactly `restNeeded` times total, never more, and
+  // sits are spread as evenly as possible across rounds with no duplicate
+  // player sitting twice in the same round.
   const restNeeded = rounds - gamesPerPlayer;
-  const totalSitSlots = teamPlayers.length * restNeeded;
+  const n = teamPlayers.length;
+
+  // Build a pool containing each player's index repeated `restNeeded` times,
+  // then shuffle it. Since restNeeded=1 in this app's fixed format, each
+  // player's index appears exactly once in the pool — dealing it out below
+  // guarantees exactly one sit-round per player, period.
+  let pool = [];
+  for (let i = 0; i < n; i++) {
+    for (let k = 0; k < restNeeded; k++) pool.push(i);
+  }
+  pool = shuffle(pool);
+
+  const totalSitSlots = pool.length;
   const sitsPerRoundBase = Math.floor(totalSitSlots / rounds);
   const remainder = totalSitSlots % rounds;
 
-  const restQuota = {}; teamPlayers.forEach(p=>restQuota[p]=restNeeded);
-  const lastSat = {}; teamPlayers.forEach(p=>lastSat[p]=-10);
   const sitSchedule = {};
+  for (let r = 1; r <= rounds; r++) sitSchedule[r] = [];
 
-  for(let r=1;r<=rounds;r++){
-    const targetSitters = sitsPerRoundBase + (r<=remainder?1:0);
-    let candidates = teamPlayers.filter(p=>restQuota[p]>0);
-    candidates = shuffle(candidates).sort((a,b)=>{
-      const aSatLast = lastSat[a]===r-1?1:0;
-      const bSatLast = lastSat[b]===r-1?1:0;
-      if(aSatLast!==bSatLast) return aSatLast-bSatLast;
-      return restQuota[b]-restQuota[a];
-    });
-    const chosen = candidates.slice(0, targetSitters);
-    chosen.forEach(p=>{restQuota[p]--; lastSat[p]=r;});
-    sitSchedule[r]=chosen;
+  let poolIndex = 0;
+  for (let r = 1; r <= rounds; r++) {
+    const target = sitsPerRoundBase + (r <= remainder ? 1 : 0);
+    const roundPlayers = new Set();
+
+    while (roundPlayers.size < target && poolIndex < pool.length) {
+      const candidateIdx = pool[poolIndex];
+      if (!roundPlayers.has(candidateIdx)) {
+        roundPlayers.add(candidateIdx);
+        poolIndex++;
+      } else {
+        // Same player already sitting this round (only possible when
+        // restNeeded > 1) — swap forward to the next different player.
+        let swapWith = poolIndex + 1;
+        while (swapWith < pool.length && roundPlayers.has(pool[swapWith])) swapWith++;
+        if (swapWith < pool.length) {
+          [pool[poolIndex], pool[swapWith]] = [pool[swapWith], pool[poolIndex]];
+        } else {
+          break;
+        }
+      }
+    }
+
+    sitSchedule[r] = Array.from(roundPlayers).map(i => teamPlayers[i]);
   }
+
   return sitSchedule;
 }
 function buildFairScheduleFixed(team1, team2){
