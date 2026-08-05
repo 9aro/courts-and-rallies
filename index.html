@@ -391,7 +391,7 @@ font-size:13px;
 <!-- Create Game -->
 <div class="screen hidden" id="createScreen">
 <h2 class="title">Host a new session</h2>
-<p class="subtitle">Name it, lock it, and you’re in charge of teams, fixtures, and scores.</p>
+<p class="subtitle">Name it, lock it, and you're in charge of teams, fixtures, and scores.</p>
 <div class="section row">
 <div class="field">
 <label>Session name</label>
@@ -448,7 +448,7 @@ font-size:13px;
 <!-- Admin tools -->
 <div class="screen hidden" id="masterScreen">
 <h2 class="title">Admin</h2>
-<p class="subtitle">Edit or delete any session stored on this device. Use this only when you mean it.</p>
+<p class="subtitle">Edit or delete any session stored in the backend. Use this only when you mean it.</p>
 
 <div class="section row" id="masterLoginSection">
 <div class="field">
@@ -461,7 +461,7 @@ font-size:13px;
 </div>
 
 <div class="section hidden" id="masterContent">
-<div class="subtitle">Sessions on this device (admin view)</div>
+<div class="subtitle">All sessions stored on the backend (admin view)</div>
 <div class="match-list" id="masterGameList"></div>
 <button class="btn secondary" id="masterHome">Back to home</button>
 </div>
@@ -546,7 +546,7 @@ font-size:13px;
 <!-- Fixtures -->
 <div class="screen hidden" id="fixturesScreen">
 <h2 class="title">Fixtures & results</h2>
-<p class="subtitle">Step 3 · Play through the matches and tap who won. The schedule won’t change.</p>
+<p class="subtitle">Step 3 · Play through the matches and tap who won. The schedule won't change.</p>
 
 <div class="section badge-row">
 <div class="pill">Courts · 2</div>
@@ -948,7 +948,7 @@ function showFixtures(game){
   renderMatches(game);
   setScreen('fixtures');
   const adminLike = state.mode==='admin' || state.master;
-  setError('fixturesError', adminLike ? '' : 'You’re in viewer mode · scores are read-only.');
+  setError('fixturesError', adminLike ? '' : "You're in viewer mode · scores are read-only.");
 }
 
 /* Set winner + save state */
@@ -1054,7 +1054,48 @@ async function refreshHostExistingSelect(){
   }
 }
 
-/* Admin list — delete from backend + local */
+/* Admin list — now fetches all sessions from the backend, not just local state */
+async function refreshMasterFromBackend(){
+  try {
+    const res = await fetch(API_BASE + "/sessions");
+    if (!res.ok) {
+      setError('masterError','Could not load sessions from backend (status ' + res.status + ').');
+      return;
+    }
+    const sessions = await res.json();
+    serverSessionsCache = sessions;
+
+    sessions.forEach(s => {
+      if (!state.games.find(g => String(g.id) === String(s.id))) {
+        state.games.push({
+          id: s.id,
+          name: s.name,
+          password: s.admin_passcode,
+          team1Name: 'Baseline Crew',
+          team2Name: 'Kitchen Kings',
+          players: [],
+          team1: { players: [] },
+          team2: { players: [] },
+          gamesPerPlayer: 4,
+          rounds: 5,
+          matches: [],
+          team1Score: 0,
+          team2Score: 0
+        });
+      }
+    });
+
+    // Also drop any local sessions that no longer exist on the backend
+    const backendIds = new Set(sessions.map(s => String(s.id)));
+    state.games = state.games.filter(g => backendIds.has(String(g.id)));
+
+    setError('masterError','');
+  } catch (e) {
+    console.error("Network error loading sessions for admin:", e);
+    setError('masterError','Network error loading sessions.');
+  }
+}
+
 function renderMasterList(){
   const list=el('masterGameList');
   list.innerHTML='';
@@ -1062,7 +1103,7 @@ function renderMasterList(){
   if (!state.games.length) {
     const empty=document.createElement('div');
     empty.className='card';
-    empty.textContent='No sessions stored on this device.';
+    empty.textContent='No sessions stored on the backend.';
     list.appendChild(empty);
     return;
   }
@@ -1111,8 +1152,19 @@ function renderMasterList(){
         state.currentGameId=id;
         state.mode='admin';
         setError('masterError','');
-        const game=currentGame();
-        if(game && game.matches && game.matches.length){
+
+        const backendState = await loadSessionStateFromBackend(id);
+        const game = currentGame();
+        if (backendState && game) {
+          game.team1Name = backendState.team1.name;
+          game.team2Name = backendState.team2.name;
+          game.team1 = { players: backendState.team1.players };
+          game.team2 = { players: backendState.team2.players };
+          game.gamesPerPlayer = backendState.games_per_player;
+          game.rounds = backendState.rounds;
+          game.matches = backendState.matches;
+          game.team1Score = backendState.team1_score;
+          game.team2Score = backendState.team2_score;
           showFixtures(game);
         } else {
           setScreen('team');
@@ -1289,8 +1341,8 @@ el('hostExistingContinue').onclick = async () => {
   }
 };
 
-/* Admin unlock */
-el('masterLogin').onclick=()=>{
+/* Admin unlock — now fetches sessions from the backend instead of relying on local-only state */
+el('masterLogin').onclick = async () => {
   const pass=el('masterPassword').value.trim();
   if(pass!==MASTER_PASS){
     setError('masterError','Incorrect tools passcode.');
@@ -1301,6 +1353,8 @@ el('masterLogin').onclick=()=>{
   setError('masterError','');
   el('masterLoginSection').classList.add('hidden');
   el('masterContent').classList.remove('hidden');
+
+  await refreshMasterFromBackend();
   renderMasterList();
   renderTop();
 };
@@ -1332,7 +1386,7 @@ el('gamesPerPlayer').addEventListener('input',()=>{
 el('randomAssign').onclick=()=>{
   const game=currentGame(); if(!game) return;
   if(state.assignmentMode!=='random')
-    return setError('teamError','Shuffle works only when “Shuffle teams” is selected.');
+    return setError('teamError','Shuffle works only when "Shuffle teams" is selected.');
   assignRandomToTeams(game);
 };
 
